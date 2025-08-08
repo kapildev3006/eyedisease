@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vision DX</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <!-- Animate.css -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  <style>
+    .notif { position: relative; }
+    .notif .badge { position: absolute; top: -6px; right: -6px; font-size: .65rem; }
+  </style>
+</head>
+<body class="bg-light text-center animate__animated animate__fadeIn position-relative">
+  
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  <div class="container mt-3">
+      {% for category, message in messages %}
+      <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      {% endfor %}
+  </div>
+  {% endif %}
+  {% endwith %}
+<!-- Animated Background Shape -->
+  <div class="animated-bg-shape position-absolute top-0 start-0 w-100" style="z-index:0;"></div>
+  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm mb-4 animate__animated animate__fadeInDown animate__delay-1s" style="z-index:1;">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-bold text-primary animate__animated animate__pulse animate__infinite" href="#">
+        <i class="bi bi-eye-fill me-2"></i>Vision DX
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav align-items-center gap-2">
+          {% if session.get('loggedin') %}
+          <li class="nav-item">
+            <a class="nav-link d-flex align-items-center notif" href="{{ url_for('notifications') }}">
+              <i class="bi bi-bell"></i>
+              {% if unread_count and unread_count > 0 %}
+              <span class="badge bg-danger rounded-pill">{{ unread_count }}</span>
+              {% endif %}
+            </a>
+          </li>
+          {% endif %}
+          <li class="nav-item"><a class="nav-link d-flex align-items-center" href="{{ url_for('login') }}"><i class="bi bi-box-arrow-in-right me-1"></i>Login</a></li>
+          <li class="nav-item"><a class="nav-link d-flex align-items-center" href="{{ url_for('register') }}"><i class="bi bi-person-plus me-1"></i>Register</a></li>
+          <li class="nav-item"><a class="nav-link d-flex align-items-center" href="{{ url_for('admin_login') }}"><i class="bi bi-shield-lock me-1"></i>Admin</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container d-flex flex-column align-items-center justify-content-center min-vh-100" style="z-index:2;">
+    <div class="landing-fit-container">
+      <h1 class="display-3 fw-bold">Vision DX</h1>
+      <p class="lead mb-4">Revolutionizing eye care with AI-powered precision and accessibility.</p>
+      <img src="https://d2jx2rerrg6sh3.cloudfront.net/images/news/ImageForNews_759816_16956356389704796.jpg" alt="Eye Detection Image" class="img-fluid rounded shadow-lg mb-4" style="max-width: 350px;" />
+      <div class="d-flex gap-3 justify-content-center mt-4">
+        <a href="/login" class="btn btn-primary btn-lg px-4"><i class="bi bi-box-arrow-in-right me-2"></i>Login</a>
+        <a href="/register" class="btn btn-outline-primary btn-lg px-4"><i class="bi bi-person-plus me-2"></i>Register</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

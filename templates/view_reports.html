@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Eye Reports</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 40px 20px;
+            color: #333;
+        }
+
+        h2 {
+            text-align: center;
+            color: #0077cc;
+            margin-bottom: 30px;
+        }
+
+        .report-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .report-card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            padding: 20px 25px;
+            margin-bottom: 20px;
+            transition: transform 0.2s;
+        }
+        .back-button {
+            margin: 20px;
+            padding: 10px 20px;
+            background-color: #0077cc;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .report-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .report-card strong {
+            color: #0077cc;
+        }
+
+        .report-card p {
+            margin: 8px 0;
+        }
+
+        .no-reports {
+            text-align: center;
+            color: #777;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Your Eye Reports</h2>
+    <div class="report-container">
+        {% if reports %}
+            {% for r in reports %}
+                <div class="report-card">
+                    <p><strong>Disease:</strong> {{ r.disease_name }}</p>
+                    <p><strong>Description:</strong> {{ r.description }}</p>
+                    <p><strong>Treatment:</strong> {{ r.treatment }}</p>
+                    <p><strong>Medication:</strong> {{ r.medication }}</p>
+                    <p><strong>Date:</strong> {{ r.created_at }}</p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="no-reports">No reports found. Upload an eye image to generate your first report.</p>
+        {% endif %}
+    </div>
+    <div>
+       <center>
+       <a href="{{ url_for('landing') }}">
+           <button class="back-button" onclick="location.href='/landing'">Back to Dashboard</button>
+       </a>
+        </center>
+    </div>
+</body>
+</html>

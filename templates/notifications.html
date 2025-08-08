@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Notifications - Vision DX</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body { margin:0; font-family:'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; background:#f7f9fc; }
+    .wrap { max-width: 900px; margin: 0 auto; padding: 24px; }
+    h1 { font-size: 1.5rem; color:#334155; }
+    .card { background:#fff; border:1px solid #e5e7eb; border-radius: 12px; padding: 16px; margin-top: 12px; box-shadow: 0 4px 14px rgba(0,0,0,0.06); }
+    .title { font-weight: 700; color:#111827; }
+    .body { color:#475569; margin-top: 6px; }
+    .meta { color:#64748b; font-size:.9rem; margin-top: 4px; }
+    a.back { display:inline-block; margin-top: 16px; text-decoration:none; color:#2563eb; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Your Notifications</h1>
+    {% if notifications and notifications|length %}
+      {% for n in notifications %}
+        <div class="card">
+          <div class="title">{{ n.title }}</div>
+          <div class="body">{{ n.body }}</div>
+          <div class="meta">{{ n.created_at }}</div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="card">No notifications yet.</div>
+    {% endif %}
+    <a class="back" href="{{ url_for('landing') }}">← Back to Dashboard</a>
+  </div>
+</body>
+</html> 

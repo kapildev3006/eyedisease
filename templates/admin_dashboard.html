@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard - Vision DX</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    :root {
+      --indigo-500: #667eea;
+      --indigo-600: #4f46e5;
+      --indigo-700: #4338ca;
+      --cyan-400: #22d3ee;
+      --slate-900: #0f172a;
+      --slate-700: #334155;
+      --white: #ffffff;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      color: var(--slate-700);
+      background: linear-gradient(120deg, var(--indigo-500), var(--indigo-700));
+      background-size: 200% 200%;
+      animation: bgShift 16s ease-in-out infinite;
+      overflow-x: hidden;
+    }
+    @keyframes bgShift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+
+    /* Floating glow shapes */
+    .glow { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+    .blob { position: absolute; width: 48vmax; height: 48vmax; border-radius: 50%; filter: blur(28px) saturate(120%); opacity: .5; }
+    .b1 { background: radial-gradient(circle at 30% 30%, #a5b4fc66, transparent 60%); left: -10vmax; top: -8vmax; animation: float1 18s ease-in-out infinite alternate; }
+    .b2 { background: radial-gradient(circle at 70% 70%, #93c5fd66, transparent 60%); right: -8vmax; bottom: -10vmax; animation: float2 22s ease-in-out infinite alternate; }
+    @keyframes float1 { from { transform: translate(0,0) scale(1)} to { transform: translate(2vmax, 3vmax) scale(1.05)} }
+    @keyframes float2 { from { transform: translate(0,0) scale(1)} to { transform: translate(-2vmax, -3vmax) scale(1.06)} }
+
+    /* Page shell */
+    .page { position: relative; z-index: 1; padding: 22px clamp(16px, 3vw, 28px); }
+
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 18px;
+      backdrop-filter: blur(10px) saturate(140%);
+      padding: 14px 18px;
+      box-shadow: 0 10px 28px rgba(0,0,0,0.12);
+    }
+
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand .logo {
+      width: 44px; height: 44px; border-radius: 12px;
+      display: grid; place-items: center; color: var(--white);
+      background: linear-gradient(135deg, var(--indigo-600), var(--cyan-400));
+      box-shadow: 0 6px 18px rgba(79,70,229,0.35);
+    }
+    .brand h1 { margin: 0; font-size: 1.2rem; color: #f1f5f9; letter-spacing: .5px; }
+
+    .top-actions { display: flex; align-items: center; gap: 10px; }
+    .btn { appearance: none; border: 0; cursor: pointer; border-radius: 12px; padding: 10px 14px; font-weight: 700; display: inline-flex; align-items: center; gap: 8px; }
+    .btn-primary { color: #fff; background: linear-gradient(90deg, var(--indigo-600), var(--indigo-700)); box-shadow: 0 8px 22px rgba(67,56,202,0.35); }
+    .btn-outline { color: #f1f5f9; border: 2px solid rgba(255,255,255,0.6); background: transparent; }
+    .btn:hover { transform: translateY(-1px); }
+
+    /* Welcome banner */
+    .hero { margin-top: 18px; display: grid; grid-template-columns: 1.6fr 1fr; gap: 16px; }
+    .hero-card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.72));
+      border: 1px solid rgba(255,255,255,0.4);
+      border-radius: 20px; padding: 20px; box-shadow: 0 12px 34px rgba(0,0,0,0.14);
+    }
+    .hero h2 { margin: 0 0 6px; font-size: clamp(1.2rem, 2vw, 1.6rem); color: var(--slate-900); }
+    .hero p { margin: 0; color: #475569; }
+
+    /* KPI cards */
+    .kpis { margin-top: 16px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .kpi {
+      background: rgba(255,255,255,0.9);
+      border: 1px solid rgba(0,0,0,0.06);
+      border-radius: 18px; padding: 18px; box-shadow: 0 10px 28px rgba(30,41,59,0.12);
+      display: grid; gap: 6px; position: relative; overflow: hidden;
+    }
+    .kpi:before { content: ''; position: absolute; inset: 0; left: -100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent); transition: left .7s; }
+    .kpi:hover:before { left: 100%; }
+    .kpi .label { color: #64748b; font-weight: 600; }
+    .kpi .value { font-size: clamp(1.6rem, 3.4vw, 2.2rem); font-weight: 800; color: var(--slate-900); letter-spacing: .5px; }
+    .kpi .trend { color: #16a34a; font-weight: 700; font-size: .96rem; display: inline-flex; align-items: center; gap: 6px; }
+
+    /* Quick actions */
+    .actions { margin-top: 16px; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+    .action {
+      display: grid; gap: 8px; align-content: start; padding: 18px;
+      border-radius: 18px; color: var(--slate-900); text-decoration: none;
+      background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,255,255,0.78));
+      border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+      transition: transform .14s cubic-bezier(.4,2,.6,1), box-shadow .2s;
+    }
+    .action:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 16px 34px rgba(0,0,0,0.18); }
+    .action .icon { width: 48px; height: 48px; border-radius: 12px; display: grid; place-items: center; color: #fff; box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
+    .a1 .icon { background: linear-gradient(135deg, #06b6d4, #22d3ee); }
+    .a2 .icon { background: linear-gradient(135deg, #10b981, #34d399); }
+    .a3 .icon { background: linear-gradient(135deg, #f59e0b, #fbbf24); }
+    .action .title { font-weight: 800; letter-spacing: .3px; }
+    .action .desc { color: #475569; font-size: .95rem; }
+
+    /* Info grid */
+    .info-grid { margin-top: 16px; display: grid; grid-template-columns: 2fr 1fr; gap: 16px; }
+    .panel {
+      background: rgba(255,255,255,0.9); border: 1px solid rgba(0,0,0,0.06);
+      border-radius: 18px; padding: 18px; box-shadow: 0 10px 28px rgba(0,0,0,0.12);
+    }
+    .panel h3 { margin: 0 0 10px; color: var(--slate-900); }
+    .list { display: grid; gap: 10px; }
+    .list-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: rgba(255,255,255,0.65); border: 1px dashed rgba(0,0,0,0.06); border-radius: 12px; }
+    .list-item i { color: var(--indigo-600); }
+
+    @media (max-width: 980px) {
+      .hero { grid-template-columns: 1fr; }
+      .kpis { grid-template-columns: 1fr; }
+      .actions { grid-template-columns: 1fr; }
+      .info-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="glow"><span class="blob b1"></span><span class="blob b2"></span></div>
+  <div class="page">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo"><i class="fa-solid fa-eye"></i></div>
+        <h1>Vision DX Admin</h1>
+      </div>
+      <div class="top-actions">
+        <a class="btn btn-outline" href="{{ url_for('landing') }}"><i class="fa-solid fa-house"></i> Home</a>
+        <a class="btn btn-primary" href="{{ url_for('admin_logout') }}"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-card">
+        <h2>Welcome{% if session.get('admin_username') %}, {{ session['admin_username'] }}{% endif %}!</h2>
+        <p>Manage appointments, oversee reports, and assist patients with secure video consultations — all in one place.</p>
+      </div>
+      <div class="hero-card" style="display:grid;align-content:center;">
+        <div style="display:flex;align-items:center;gap:10px; color:#0f172a; font-weight:800;">
+          <i class="fa-solid fa-shield-heart"></i> Secure Admin Portal
+        </div>
+        <div style="color:#475569;">Encrypted sessions and role-based access keep your data safe.</div>
+      </div>
+    </section>
+
+    <section class="kpis">
+      <div class="kpi">
+        <span class="label">Completed Appointments</span>
+        <span class="value">{{ completed }}</span>
+        <span class="trend"><i class="fa-solid fa-arrow-trend-up"></i> Healthy throughput</span>
+      </div>
+      <div class="kpi">
+        <span class="label">Pending Appointments</span>
+        <span class="value">{{ pending }}</span>
+        <span class="trend" style="color:#f59e0b"><i class="fa-solid fa-clock"></i> Needs attention</span>
+      </div>
+      <div class="kpi">
+        <span class="label">Total Appointments</span>
+        <span class="value">{{ (completed or 0) + (pending or 0) }}</span>
+        <span class="trend" style="color:#06b6d4"><i class="fa-solid fa-chart-pie"></i> Overview</span>
+      </div>
+    </section>
+
+    <section class="actions">
+      <a class="action a1" href="{{ url_for('report') }}">
+        <span class="icon"><i class="fa-solid fa-file-medical"></i></span>
+        <span class="title">Reports</span>
+        <span class="desc">View and manage diagnosis reports.</span>
+      </a>
+      <a class="action a2" href="{{ url_for('consultation') }}">
+        <span class="icon"><i class="fa-solid fa-video"></i></span>
+        <span class="title">Consultation</span>
+        <span class="desc">Start a secure live session.</span>
+      </a>
+      <a class="action a3" href="{{ url_for('admin_users') }}">
+        <span class="icon"><i class="fa-solid fa-users"></i></span>
+        <span class="title">Users</span>
+        <span class="desc">View registered users only.</span>
+      </a>
+      <a class="action" href="{{ url_for('upload') }}">
+        <span class="icon" style="background:linear-gradient(135deg,#8b5cf6,#6366f1)"><i class="fa-solid fa-cloud-arrow-up"></i></span>
+        <span class="title">Upload</span>
+        <span class="desc">Upload images for detection.</span>
+      </a>
+      <a class="action" href="{{ url_for('history') }}">
+        <span class="icon" style="background:linear-gradient(135deg,#ef4444,#f97316)"><i class="fa-solid fa-clock-rotate-left"></i></span>
+        <span class="title">History</span>
+        <span class="desc">Review previous activity.</span>
+      </a>
+      <a class="action" href="{{ url_for('feedback') }}">
+        <span class="icon" style="background:linear-gradient(135deg,#22c55e,#84cc16)"><i class="fa-solid fa-comment-dots"></i></span>
+        <span class="title">Feedback</span>
+        <span class="desc">Read and manage feedback.</span>
+      </a>
+      <a class="action" href="{{ url_for('about') }}">
+        <span class="icon" style="background:linear-gradient(135deg,#06b6d4,#0ea5e9)"><i class="fa-solid fa-circle-info"></i></span>
+        <span class="title">About</span>
+        <span class="desc">Learn about Vision DX.</span>
+      </a>
+    </section>
+
+    <section class="info-grid">
+      <div class="panel">
+        <h3><i class="fa-solid fa-lightbulb"></i> Helpful tips</h3>
+        <div class="list">
+          <div class="list-item"><i class="fa-solid fa-circle-check"></i> Keep appointment statuses up to date to reduce wait times.</div>
+          <div class="list-item"><i class="fa-solid fa-shield"></i> Log out after completing administrative tasks on shared devices.</div>
+          <div class="list-item"><i class="fa-solid fa-bolt"></i> Use the consultation action for urgent live sessions.</div>
+        </div>
+      </div>
+      <div class="panel">
+        <h3><i class="fa-solid fa-bell"></i> Notices</h3>
+        <div class="list">
+          <div class="list-item"><i class="fa-solid fa-circle-info"></i> System maintenance scheduled this weekend.</div>
+          <div class="list-item"><i class="fa-solid fa-circle-info"></i> New report formats rolling out next week.</div>
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+</html>

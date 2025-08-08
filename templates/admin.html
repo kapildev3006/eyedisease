@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin - Vision DX</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    :root {
+      --indigo-500: #667eea;
+      --indigo-600: #4f46e5;
+      --indigo-700: #4338ca;
+      --cyan-400: #22d3ee;
+      --slate-900: #0f172a;
+      --slate-700: #334155;
+      --white: #ffffff;
+      --shadow-1: 0 10px 28px rgba(0,0,0,0.12);
+      --shadow-2: 0 12px 34px rgba(0,0,0,0.14);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      color: var(--slate-700);
+      background: linear-gradient(120deg, var(--indigo-500), var(--indigo-700));
+      background-size: 200% 200%;
+      animation: bgShift 16s ease-in-out infinite;
+      overflow-x: hidden;
+    }
+    @keyframes bgShift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+
+    /* Floating glow shapes */
+    .glow { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+    .blob { position: absolute; width: 48vmax; height: 48vmax; border-radius: 50%; filter: blur(28px) saturate(120%); opacity: .5; }
+    .b1 { background: radial-gradient(circle at 30% 30%, #a5b4fc66, transparent 60%); left: -10vmax; top: -8vmax; animation: float1 18s ease-in-out infinite alternate; }
+    .b2 { background: radial-gradient(circle at 70% 70%, #93c5fd66, transparent 60%); right: -8vmax; bottom: -10vmax; animation: float2 22s ease-in-out infinite alternate; }
+    @keyframes float1 { from { transform: translate(0,0) scale(1)} to { transform: translate(2vmax, 3vmax) scale(1.05)} }
+    @keyframes float2 { from { transform: translate(0,0) scale(1)} to { transform: translate(-2vmax, -3vmax) scale(1.06)} }
+
+    .page { position: relative; z-index: 1; padding: 22px clamp(16px, 3vw, 28px); }
+
+    .topbar { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:14px 18px; border-radius: var(--radius);
+      background: rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.25); backdrop-filter: blur(10px) saturate(140%); box-shadow: var(--shadow-1); }
+    .brand { display:flex; align-items:center; gap:12px; }
+    .logo { width:44px; height:44px; border-radius:12px; display:grid; place-items:center; color:#fff; background:linear-gradient(135deg, var(--indigo-600), var(--cyan-400)); box-shadow: 0 6px 18px rgba(79,70,229,0.35); }
+    .brand h1 { margin:0; font-size:1.2rem; letter-spacing:.3px; color:#f1f5f9; }
+    .actions { display:flex; align-items:center; gap:10px; }
+    .btn { appearance:none; border:0; cursor:pointer; border-radius:12px; padding:10px 14px; font-weight:700; display:inline-flex; align-items:center; gap:8px; text-decoration:none; }
+    .btn-outline { color:#f1f5f9; border:2px solid rgba(255,255,255,0.65); background:transparent; }
+    .btn-primary { color:#fff; background: linear-gradient(90deg, var(--indigo-600), var(--indigo-700)); box-shadow: 0 8px 22px rgba(67,56,202,0.35); }
+
+    /* KPIs */
+    .kpis { margin-top: 16px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .kpi { background: rgba(255,255,255,0.9); border:1px solid rgba(0,0,0,0.06); border-radius: var(--radius); padding:18px; box-shadow: var(--shadow-1); display:grid; gap:6px; position: relative; overflow: hidden; }
+    .kpi:before { content:''; position:absolute; inset:0; left:-100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent); transition:left .7s; }
+    .kpi:hover:before { left: 100%; }
+    .kpi .label { color:#64748b; font-weight:600; }
+    .kpi .value { font-size: clamp(1.6rem, 3.4vw, 2.2rem); font-weight:800; color:var(--slate-900); letter-spacing:.5px; }
+
+    /* Panels */
+    .grid { margin-top: 16px; display:grid; grid-template-columns: 1.8fr 1fr; gap: 16px; }
+    .panel { background: rgba(255,255,255,0.92); border:1px solid rgba(0,0,0,0.06); border-radius: var(--radius); box-shadow: var(--shadow-2); overflow: hidden; }
+    .panel-header { display:flex; align-items:center; justify-content:space-between; gap:12px; padding: 14px 18px; border-bottom:1px solid rgba(0,0,0,0.06); background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.75)); }
+    .panel-title { margin:0; color: var(--slate-900); font-weight:800; display:flex; align-items:center; gap:10px; }
+
+    .table-wrap { width:100%; overflow:auto; }
+    table { width:100%; border-collapse: collapse; font-size: 0.95rem; }
+    th, td { padding:12px 14px; text-align:left; border-bottom:1px solid rgba(0,0,0,0.06); }
+    th { background:#f8fafc; color:#334155; position: sticky; top: 0; z-index: 1; }
+    tr:hover td { background:#f1f5f9; }
+
+    .badge { display:inline-block; padding:6px 10px; border-radius:999px; font-weight:800; }
+    .bg-success { background:#16a34a; color:#fff; }
+    .bg-danger { background:#ef4444; color:#fff; }
+    .bg-warning { background:#fbbf24; color:#111827; }
+
+    @media (max-width: 1100px) { .grid { grid-template-columns: 1fr; } .kpis { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="glow"><span class="blob b1"></span><span class="blob b2"></span></div>
+  <div class="page">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo"><i class="fa-solid fa-eye"></i></div>
+        <h1>Vision DX Admin</h1>
+      </div>
+      <div class="actions">
+        <a class="btn btn-outline" href="{{ url_for('history') }}"><i class="fa-solid fa-clock-rotate-left"></i> History</a>
+        <a class="btn btn-primary" href="{{ url_for('admin_logout') }}"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+      </div>
+    </header>
+
+    <section class="kpis">
+      <div class="kpi" data-filter="completed" role="button" tabindex="0" onclick="filterAppointments('completed')">
+        <span class="label">Completed Appointments</span>
+        <span class="value">{{ completed or 0 }}</span>
+      </div>
+      <div class="kpi" data-filter="pending" role="button" tabindex="0" onclick="filterAppointments('pending')">
+        <span class="label">Pending Appointments</span>
+        <span class="value">{{ pending or 0 }}</span>
+      </div>
+      <div class="kpi" data-filter="all" role="button" tabindex="0" onclick="filterAppointments('all')">
+        <span class="label">Total Appointments</span>
+        <span class="value">{{ (completed or 0) + (pending or 0) }}</span>
+      </div>
+    </section>
+
+    <script>
+      function filterAppointments(status) {
+        const rows = document.querySelectorAll('#appointmentsTable tbody tr');
+        rows.forEach(r => {
+          // skip header rows already filtered
+        });
+        // Our table has each appointment as a single row, get the index for status cell
+        const statusIndex = Array.from(document.querySelectorAll('#appointmentsTable thead th')).findIndex(th => th.textContent.trim().toLowerCase() === 'status');
+        document.querySelectorAll('#appointmentsTable tbody tr').forEach(tr => {
+          const cells = tr.querySelectorAll('td');
+          if (cells.length === 0) return; // skip
+          const statusBadge = cells[statusIndex]?.innerText.trim().toLowerCase();
+          const isMatch = status === 'all' || (statusBadge && statusBadge.includes(status));
+          tr.style.display = isMatch ? '' : 'none';
+        });
+      }
+    </script>
+
+    <section class="grid">
+      <!-- Appointments -->
+      <div class="panel">
+        <div class="panel-header">
+          <h3 class="panel-title"><i class="fa-solid fa-calendar-check"></i> Appointments</h3>
+        </div>
+        <div class="table-wrap">
+          <table id="appointmentsTable">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>User ID</th>
+                <th>Name</th>
+                <th>City</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Mobile</th>
+                <th>Email</th>
+                <th>Message</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for a in appointments %}
+              {% set st = (a.status or 'pending')|lower %}
+              <tr>
+                <td>{{ a.id }}</td>
+                <td>{{ a.user_id }}</td>
+                <td>{{ a.name }}</td>
+                <td>{{ a.city }}</td>
+                <td>{{ a.appointment_date }}</td>
+                <td>{{ a.appointment_time }}</td>
+                <td>{{ a.mobile }}</td>
+                <td>{{ a.email }}</td>
+                <td>{{ a.message }}</td>
+                <td>
+                  <span class="badge {% if st=='approved' %}bg-success{% elif st=='declined' %}bg-danger{% elif st=='pending' %}bg-warning{% else %}bg-warning{% endif %}">{{ st.capitalize() }}</span>
+                </td>
+                <td>
+                  <form method="POST" action="{{ url_for('update_status') }}" style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:0;">
+                    <input type="hidden" name="appointment_id" value="{{ a.id }}" />
+                    <button name="status" value="approved" class="btn btn-primary" type="submit" title="Approve"><i class="fa-solid fa-check"></i></button>
+                    <button name="status" value="pending" class="btn btn-outline" type="submit" title="Mark Pending"><i class="fa-solid fa-clock"></i></button>
+                    <button name="status" value="declined" class="btn btn-outline" type="submit" title="Decline" style="border-color:#ef4444;color:#ef4444;"><i class="fa-solid fa-xmark"></i></button>
+                  </form>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Side: Users -->
+      <div class="panel">
+        <div class="panel-header">
+          <h3 class="panel-title"><i class="fa-solid fa-users"></i> Users</h3>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:110px">ID</th>
+                <th>Name</th>
+                <th>Email</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for user in users %}
+              <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.email }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <!-- Feedback -->
+      <div class="panel">
+        <div class="panel-header">
+          <h3 class="panel-title"><i class="fa-solid fa-comment-dots"></i> Feedback</h3>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Experience</th>
+                <th>Comments</th>
+                <th>Created At</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for f in feedbacks %}
+              <tr>
+                <td>{{ f.id }}</td>
+                <td>{{ f.name }}</td>
+                <td>{{ f.email }}</td>
+                <td>{{ f.experience }}</td>
+                <td>{{ f.comments }}</td>
+                <td>{{ f.created_at }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Contacts -->
+      <div class="panel">
+        <div class="panel-header">
+          <h3 class="panel-title"><i class="fa-solid fa-inbox"></i> Contact Messages</h3>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Message</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for c in contacts %}
+              <tr>
+                <td>{{ c.id }}</td>
+                <td>{{ c.name }}</td>
+                <td>{{ c.email }}</td>
+                <td>{{ c.message }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+</html>

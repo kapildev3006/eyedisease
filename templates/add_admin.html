@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Create Admin - EyeCare AI</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f0f4f8;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .create-admin-container {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        width: 350px;
+      }
+
+      .create-admin-container h2 {
+        text-align: center;
+        color: #0077cc;
+        margin-bottom: 20px;
+      }
+
+      .create-admin-container input[type="text"],
+      .create-admin-container input[type="password"] {
+        width: 100%;
+        padding: 12px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+
+      .create-admin-container button {
+        width: 100%;
+        padding: 12px;
+        background-color: #0077cc;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      .create-admin-container button:hover {
+        background-color: #005fa3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="create-admin-container">
+      <h2>Add Admin</h2>
+      <form method="POST" action="{{ url_for('add_admin') }}">
+        <input type="text" name="username" placeholder="Username" required />
+        <input type="password" name="password" placeholder="Password" required />
+        <button onclick="location.href='/admin_login'">Create Admin</button>
+      </form>
+      Already you  have an account? <a href="{{ url_for('admin_login') }}">Login</a>
+    </div>
+  </body>
+</html>

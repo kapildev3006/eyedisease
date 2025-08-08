@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Book Appointment - Vision Dx</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400;500&display=swap" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      overflow-x: hidden;
+      position: relative;
+    }
+    .animated-bg {
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background: linear-gradient(120deg, #667eea 0%, #764ba2 100%);
+      z-index: -2;
+      animation: gradientShift 15s ease infinite;
+    }
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .particles {
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: -1;
+    }
+    .particle {
+      position: absolute; width: 6px; height: 6px; background: rgba(255,255,255,0.25); border-radius: 50%; animation: float 7s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%,100% { transform: translateY(0px) rotate(0deg); opacity: 0; }
+      50% { transform: translateY(-120px) rotate(180deg); opacity: 1; }
+    }
+    #wrapper {
+      display: flex; justify-content: center; align-items: center; min-height: 100vh;
+    }
+    .appointment-card {
+      background: rgba(255,255,255,0.18);
+      box-shadow: 0 8px 40px rgba(102,126,234,0.18), 0 1.5px 8px rgba(0,0,0,0.08);
+      border-radius: 24px;
+      border: 1.5px solid rgba(102,126,234,0.18);
+      padding: 48px 36px 36px 36px;
+      max-width: 560px;
+      width: 100%;
+      backdrop-filter: blur(16px);
+      position: relative;
+      animation: fadeInUp 1.2s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(60px); } to { opacity: 1; transform: translateY(0); } }
+    .form-head {
+      text-align: center;
+      font-size: 2.3rem;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      letter-spacing: 2px;
+      color: transparent;
+      background: linear-gradient(90deg, #667eea, #764ba2, #00e6d0);
+      background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      text-shadow: 0 4px 24px rgba(102,126,234,0.25), 0 1px 0 #fff;
+      margin-bottom: 18px;
+      position: relative;
+      animation: fadeInUp 1.3s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .form-head::after {
+      content: '';
+      position: absolute;
+      bottom: -10px; left: 50%; transform: translateX(-50%);
+      width: 80px; height: 4px;
+      background: linear-gradient(90deg, #667eea, #764ba2, #00e6d0);
+      border-radius: 2px;
+      animation: underlineGlow 2s infinite alternate;
+    }
+    @keyframes underlineGlow {
+      0% { box-shadow: 0 0 10px #667eea, 0 0 20px #764ba2; }
+      100% { box-shadow: 0 0 30px #00e6d0, 0 0 40px #764ba2; }
+    }
+    .format {
+      display: block;
+      margin-top: 18px;
+      font-size: 1.08rem;
+      font-weight: 600;
+      color: #667eea;
+      letter-spacing: 0.5px;
+      margin-bottom: 2px;
+      transition: color 0.3s;
+    }
+    .input-group {
+      position: relative;
+      margin-bottom: 18px;
+    }
+    .input-group input,
+    .input-group select,
+    .input-group textarea {
+      width: 100%;
+      padding: 14px 14px 14px 18px;
+      border: none;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.85);
+      font-size: 1.08rem;
+      color: #333;
+      margin-top: 2px;
+      box-shadow: 0 2px 12px rgba(102,126,234,0.07);
+      transition: box-shadow 0.3s, background 0.3s;
+      outline: none;
+    }
+    .input-group input:focus,
+    .input-group select:focus,
+    .input-group textarea:focus {
+      background: #fff;
+      box-shadow: 0 0 0 2px #764ba2, 0 2px 12px rgba(102,126,234,0.13);
+    }
+    .input-group label {
+      position: absolute;
+      left: 18px;
+      top: 16px;
+      color: #888;
+      font-size: 1rem;
+      pointer-events: none;
+      transition: 0.2s;
+      background: transparent;
+    }
+    .input-group input:focus + label,
+    .input-group input:not(:placeholder-shown) + label,
+    .input-group select:focus + label,
+    .input-group select:not([value=""]) + label,
+    .input-group textarea:focus + label,
+    .input-group textarea:not(:placeholder-shown) + label {
+      top: -12px;
+      left: 10px;
+      font-size: 0.88rem;
+      color: #764ba2;
+      background: #fff;
+      padding: 0 6px;
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(102,126,234,0.07);
+    }
+    .note {
+      display: block;
+      font-size: 0.93rem;
+      color: #555;
+      margin-top: 2px;
+      margin-bottom: 8px;
+      text-align: right;
+    }
+    .btn-main {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-top: 18px;
+      cursor: pointer;
+      box-shadow: 0 4px 18px rgba(102,126,234,0.13);
+      transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-main i { margin-right: 8px; }
+    .btn-main::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%; width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.5s;
+      z-index: 0;
+    }
+    .btn-main:hover::before { left: 100%; }
+    .btn-main:hover {
+      background: linear-gradient(90deg, #764ba2, #00e6d0);
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 8px 32px rgba(102,126,234,0.18);
+    }
+    .btn-secondary {
+      width: 100%;
+      padding: 12px;
+      background: #fff;
+      color: #764ba2;
+      border: 2px solid #764ba2;
+      border-radius: 10px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      margin-top: 10px;
+      cursor: pointer;
+      transition: background 0.3s, color 0.3s, border 0.3s;
+    }
+    .btn-secondary:hover {
+      background: #764ba2;
+      color: #fff;
+      border: 2px solid #764ba2;
+    }
+    @media (max-width: 600px) {
+      .appointment-card { padding: 24px 8px 18px 8px; max-width: 98vw; }
+      .form-head { font-size: 1.3rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="animated-bg"></div>
+  <div class="particles" id="particles"></div>
+  <main id="wrapper">
+    <div class="appointment-card">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+      <div class="container mt-3">
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+      {% endwith %}
+      <form action="{{ url_for('appointment') }}" id="appoint-form" method="POST" autocomplete="off">
+        <div class="form-head">Book Your Appointment</div>
+        <div class="input-group">
+          <select id="dropdown" name="city" required>
+            <option value="" disabled selected>Select Your City</option>
+            <option value="delhi">Delhi</option>
+            <option value="mumbai">Mumbai</option>
+            <option value="bangalore">Bangalore</option>
+          </select>
+          <label for="dropdown">Select City</label>
+        </div>
+        <div class="input-group">
+          <input type="date" id="date" name="date" required placeholder=" " />
+          <label for="date">Select Date</label>
+        </div>
+        <div class="input-group">
+          <input type="time" id="time" name="time" min="08:00" max="20:00" required placeholder=" " />
+          <label for="time">Select Time</label>
+        </div>
+        <span class="note"><i class="fas fa-info-circle"></i> Visiting hours: 8 AM to 8 PM</span>
+        <div class="input-group">
+          <input type="text" id="name" name="name" maxlength="50" required placeholder=" " />
+          <label for="name">Full Name*</label>
+        </div>
+        <div class="input-group">
+          <input type="tel" id="mobile" name="mobile" maxlength="10" required placeholder=" " />
+          <label for="mobile">Mobile Number*</label>
+        </div>
+        <div class="input-group">
+          <input type="email" id="email" name="email" placeholder=" " />
+          <label for="email">Email (optional)</label>
+        </div>
+        <div class="input-group">
+          <textarea id="message" name="message" rows="3" placeholder=" "></textarea>
+          <label for="message">Additional Message (optional)</label>
+        </div>
+        <button type="submit" class="btn-main"><i class="fas fa-calendar-check"></i>Book Appointment</button>
+        <button type="button" onclick="location.href='/landing'" class="btn-secondary"><i class="fas fa-arrow-left"></i> Back</button>
+      </form>
+    </div>
+  </main>
+  <script>
+    // Create floating particles
+    function createParticles() {
+      const particlesContainer = document.getElementById('particles');
+      const particleCount = 24;
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.animationDelay = Math.random() * 7 + 's';
+        particle.style.animationDuration = (Math.random() * 3 + 4) + 's';
+        particlesContainer.appendChild(particle);
+      }
+    }
+    document.addEventListener('DOMContentLoaded', function() { createParticles(); });
+  </script>
+</body>
+</html>

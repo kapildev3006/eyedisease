@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Video Consultation - Vision DX</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    :root {
+      --primary-600: #2563eb; /* indigo-600 */
+      --primary-700: #1e40af; /* indigo-800 */
+      --accent: #06b6d4;      /* cyan-500 */
+      --bg-start: #667eea;    /* gradient start */
+      --bg-end: #764ba2;      /* gradient end */
+      --glass-bg: rgba(255,255,255,0.12);
+      --glass-border: rgba(255,255,255,0.24);
+      --text-strong: #0f172a; /* slate-900 */
+      --text-soft: #334155;   /* slate-700 */
+      --white: #ffffff;
+      --shadow-1: 0 10px 40px rgba(0,0,0,0.15);
+      --shadow-2: 0 20px 60px rgba(0,0,0,0.22);
+      --radius-xxl: 28px;
+      --radius-xl: 18px;
+      --radius-lg: 14px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, 'Apple Color Emoji', 'Segoe UI Emoji';
+      color: var(--text-soft);
+      background: linear-gradient(120deg, var(--bg-start), var(--bg-end));
+      background-size: 200% 200%;
+      animation: bgShift 16s ease-in-out infinite;
+      overflow-x: hidden;
+    }
+
+    @keyframes bgShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Soft floating blobs */
+    .blob {
+      position: fixed;
+      width: 50vmax;
+      height: 50vmax;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.25), rgba(255,255,255,0.06) 50%, transparent 70%);
+      filter: blur(30px) saturate(120%);
+      border-radius: 50%;
+      z-index: 0;
+      pointer-events: none;
+      animation: float 18s ease-in-out infinite alternate;
+    }
+    .blob.b2 { animation-duration: 22s; transform: translate(40vw, 20vh) scale(1.1); }
+    .blob.b3 { animation-duration: 26s; transform: translate(10vw, 65vh) scale(0.9); }
+
+    @keyframes float {
+      0%   { transform: translate(8vw, 6vh) scale(1); }
+      100% { transform: translate(16vw, 12vh) scale(1.08); }
+    }
+
+    /* Subtle particle twinkles */
+    .particles { position: fixed; inset: 0; pointer-events: none; z-index: 1; }
+    .particle { position: absolute; width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.28); box-shadow: 0 0 8px rgba(255,255,255,0.35); animation: twinkle var(--dur) ease-in-out infinite; opacity: 0; }
+    @keyframes twinkle { 0%, 100% { transform: translateY(0) scale(0.6) rotate(0); opacity: 0; } 50% { transform: translateY(-120px) scale(1) rotate(180deg); opacity: 1; } }
+
+    /* Page shell */
+    .page {
+      position: relative;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: clamp(16px, 3vw, 32px);
+      z-index: 2;
+    }
+
+    .shell {
+      width: min(1200px, 96vw);
+      background: linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0.10));
+      border: 1px solid rgba(255,255,255,0.24);
+      border-radius: var(--radius-xxl);
+      backdrop-filter: blur(14px) saturate(140%);
+      box-shadow: var(--shadow-1);
+      overflow: hidden;
+      transform: translateY(10px);
+      animation: shellIn 900ms cubic-bezier(0.22,1,0.36,1) forwards;
+    }
+    @keyframes shellIn { to { transform: translateY(0); } }
+
+    .header {
+      position: relative;
+      padding: clamp(18px, 3vw, 28px) clamp(18px, 3vw, 32px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.22);
+      background: linear-gradient(180deg, rgba(255,255,255,0.35), rgba(255,255,255,0.10));
+    }
+
+    .title {
+      margin: 0;
+      line-height: 1.1;
+      font-family: 'Montserrat', system-ui, sans-serif;
+      font-weight: 900;
+      font-size: clamp(1.4rem, 2.4vw, 2.2rem);
+      letter-spacing: 0.5px;
+      background: linear-gradient(90deg, #fff, #e0f2fe, #a5b4fc, #fff);
+      background-size: 200% 200%;
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+      -webkit-text-fill-color: transparent;
+      animation: shine 9s linear infinite;
+      text-shadow: 0 2px 24px rgba(255,255,255,0.25);
+    }
+    @keyframes shine { 0%{background-position: 0% 50%} 100%{background-position: 200% 50%} }
+
+    .room-tag {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 10px 14px;
+      background: rgba(255,255,255,0.55);
+      color: var(--primary-700);
+      border-radius: 999px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      border: 1px solid rgba(30,64,175,0.25);
+      box-shadow: 0 6px 18px rgba(30,64,175,0.18);
+      transform: translateY(2px);
+    }
+
+    .content {
+      display: grid;
+      grid-template-columns: 1.8fr 1fr;
+      gap: clamp(16px, 3vw, 28px);
+      padding: clamp(18px, 3vw, 28px);
+    }
+
+    /* Video area */
+    .video-card {
+      background: rgba(255,255,255,0.7);
+      border: 1px solid rgba(0,0,0,0.06);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 14px 44px rgba(30,64,175,0.15);
+    }
+
+    .video-header {
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+      padding: 12px 14px;
+      background: linear-gradient(180deg, rgba(30,64,175,0.10), rgba(30,64,175,0.03));
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .controls { display: flex; align-items: center; gap: 8px; }
+    .btn {
+      appearance: none; border: 0; cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 10px 14px; border-radius: 12px; font-weight: 700;
+      transition: transform .14s cubic-bezier(.4,2,.6,1), box-shadow .2s, background .2s, color .2s;
+      position: relative; overflow: hidden;
+    }
+    .btn-primary { color: #fff; background: linear-gradient(90deg, var(--primary-600), var(--primary-700)); box-shadow: 0 6px 20px rgba(30,64,175,0.25); }
+    .btn-outline { color: var(--primary-700); background: #fff; border: 2px solid var(--primary-700); }
+    .btn i { position: relative; z-index: 1; }
+    .btn:hover { transform: translateY(-1px) scale(1.02); }
+    .btn:active { transform: translateY(0); }
+    .btn::before {
+      content: '';
+      position: absolute; inset: 0; left: -100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.28), transparent);
+      transition: left .45s; z-index: 0;
+    }
+    .btn:hover::before { left: 100%; }
+
+    .video-wrapper { position: relative; background: #0b1220; }
+    iframe {
+      width: 100%; height: clamp(420px, 54vh, 640px);
+      border: none; display: block;
+    }
+
+    /* Loading skeleton over iframe */
+    .skeleton {
+      position: absolute; inset: 0; pointer-events: none;
+      background: linear-gradient(120deg, rgba(255,255,255,0.07), rgba(255,255,255,0.18), rgba(255,255,255,0.07));
+      background-size: 200% 200%;
+      animation: shimmer 1.6s linear infinite;
+    }
+    .video-wrapper.loaded .skeleton { opacity: 0; visibility: hidden; transition: opacity .4s ease; }
+    @keyframes shimmer { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
+
+    /* Side panel */
+    .side-card {
+      background: rgba(255,255,255,0.7);
+      border: 1px solid rgba(0,0,0,0.06);
+      border-radius: var(--radius-xl);
+      padding: clamp(14px, 2.3vw, 20px);
+      box-shadow: 0 10px 36px rgba(30,64,175,0.12);
+      display: grid; gap: 14px;
+      align-content: start;
+    }
+
+    .panel-title {
+      font-family: 'Montserrat', sans-serif; font-weight: 800; letter-spacing: .3px; margin: 0;
+      color: var(--primary-700); display: flex; align-items: center; gap: 10px;
+    }
+
+    .info-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+    .info-row { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 12px; background: rgba(255,255,255,0.65); border: 1px dashed rgba(0,0,0,0.08); }
+    .info-label { width: 120px; color: #475569; font-weight: 600; }
+    .info-value { color: #0f172a; font-weight: 700; }
+
+    .tips { margin-top: 4px; }
+    .tips h4 { margin: 10px 0 8px; color: #0f172a; }
+    .tips ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; }
+    .tips li { color: #334155; }
+
+    .quick-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 6px; }
+
+    /* Footer note */
+    .footer-note { text-align: center; color: rgba(15,23,42,0.9); font-size: 0.95rem; padding: 10px 18px 18px; }
+
+    /* Floating back link */
+    .back-link {
+      position: fixed; top: 18px; left: 18px; z-index: 3;
+      text-decoration: none; color: #0f172a; font-weight: 700;
+      background: rgba(255,255,255,0.85); padding: 10px 14px; border-radius: 999px;
+      border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+      display: inline-flex; align-items: center; gap: 8px;
+      transition: transform .14s cubic-bezier(.4,2,.6,1), box-shadow .2s, background .2s;
+    }
+    .back-link:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(0,0,0,0.18); background: #fff; }
+
+    /* Responsive */
+    @media (max-width: 980px) {
+      .content { grid-template-columns: 1fr; }
+      iframe { height: clamp(360px, 54vh, 520px); }
+      .quick-actions { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <a class="back-link" href="{{ url_for('home') }}">
+    <i class="fa-solid fa-arrow-left"></i>
+    <span>Back</span>
+  </a>
+
+  <!-- background visual layers -->
+  <div class="blob"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+  <div class="particles" id="particles"></div>
+
+  <main class="page">
+    <section class="shell" role="region" aria-label="Video consultation">
+      <header class="header">
+        <h1 class="title">Live Video Consultation</h1>
+        <div class="room-tag" title="Room code">
+          <i class="fa-solid fa-shield-heart"></i>
+          <span>Room: EyeCareAIConsultationRoom</span>
+        </div>
+      </header>
+
+      <div class="content">
+        <article class="video-card">
+          <div class="video-header">
+            <div class="controls">
+              <button class="btn btn-primary" id="openNew" type="button"><i class="fa-solid fa-up-right-from-square"></i><span>Open in New Tab</span></button>
+              <button class="btn btn-outline" id="refresh" type="button"><i class="fa-solid fa-rotate"></i><span>Refresh</span></button>
+            </div>
+            <div style="opacity:.75; font-weight:700; display:flex; align-items:center; gap:8px;">
+              <i class="fa-solid fa-lock"></i>
+              <span>Encrypted via Jitsi</span>
+            </div>
+          </div>
+          <div class="video-wrapper" id="videoWrapper">
+            <div class="skeleton" aria-hidden="true"></div>
+            <iframe id="jitsiFrame" src="https://meet.jit.si/EyeCareAIConsultationRoom" allow="camera; microphone" title="Video Call"></iframe>
+          </div>
+        </article>
+
+        <aside class="side-card">
+          <h3 class="panel-title"><i class="fa-solid fa-circle-info"></i> Session Details</h3>
+          <div class="info-grid">
+            <div class="info-row"><div class="info-label">Doctor</div><div class="info-value">Assigned</div></div>
+            <div class="info-row"><div class="info-label">Patient</div><div class="info-value">You</div></div>
+            <div class="info-row"><div class="info-label">Status</div><div class="info-value">Live</div></div>
+          </div>
+
+          <div class="tips">
+            <h4><i class="fa-solid fa-lightbulb"></i> Tips</h4>
+            <ul>
+              <li>Use a well-lit room so your eyes are clearly visible.</li>
+              <li>Keep the camera at eye level and look straight ahead.</li>
+              <li>Use headphones to avoid audio echo.</li>
+              <li>Close other tabs or apps to improve network quality.</li>
+            </ul>
+          </div>
+
+          <div class="quick-actions">
+            <a class="btn btn-outline" href="{{ url_for('appointment') }}"><i class="fa-solid fa-calendar-plus"></i><span>Book follow-up</span></a>
+            <a class="btn btn-outline" href="{{ url_for('report') }}"><i class="fa-solid fa-file-medical"></i><span>View reports</span></a>
+          </div>
+        </aside>
+      </div>
+
+      <p class="footer-note">Your consultation is secured on Jitsi Meet. No sign-up required.</p>
+    </section>
+  </main>
+
+  <script>
+    // Particles generator
+    (function () {
+      const root = document.getElementById('particles');
+      const count = Math.min(26, Math.max(14, Math.floor(window.innerWidth / 64)));
+      for (let i = 0; i < count; i++) {
+        const p = document.createElement('span');
+        p.className = 'particle';
+        const size = Math.random() * 6 + 4; // 4 - 10px
+        p.style.width = size + 'px';
+        p.style.height = size + 'px';
+        p.style.left = Math.random() * 100 + 'vw';
+        p.style.top = Math.random() * 100 + 'vh';
+        p.style.setProperty('--dur', (6 + Math.random() * 6) + 's');
+        root.appendChild(p);
+      }
+    })();
+
+    // Iframe loader handling
+    (function () {
+      const frame = document.getElementById('jitsiFrame');
+      const wrapper = document.getElementById('videoWrapper');
+      const url = 'https://meet.jit.si/EyeCareAIConsultationRoom';
+
+      frame.addEventListener('load', () => {
+        wrapper.classList.add('loaded');
+      });
+
+      document.getElementById('refresh').addEventListener('click', () => {
+        wrapper.classList.remove('loaded');
+        frame.src = url + (url.includes('?') ? '&' : '?') + 't=' + Date.now();
+      });
+
+      document.getElementById('openNew').addEventListener('click', () => {
+        window.open(url, '_blank', 'noopener');
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Eye Disease Detector</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #eef6fb;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      color: #0077cc;
+      margin-bottom: 20px;
+    }
+
+    .uploader {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 500px;
+      text-align: center;
+    }
+
+    input[type="file"] {
+      margin: 20px 0;
+    }
+
+    .report {
+      margin-top: 30px;
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      display: none;
+    }
+
+    .report h2 {
+      color: #0077cc;
+    }
+
+    .report p {
+      line-height: 1.6;
+    }
+    .back-button {
+    margin: 20px;
+    padding: 10px 20px;
+    background-color: #0077cc;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  .back-button:hover {
+    background-color: #005fa3;
+  }
+  </style>
+</head>
+<body>
+
+  <h1>Eye Disease Detector</h1>
+
+  <div class="uploader">
+    <p>Upload an eye image to detect possible disease:</p>
+    <input type="file" id="imageInput" accept="image/*" />
+    <button onclick="generateReport()">Generate Report</button>
+  </div>
+
+  <div class="report" id="reportSection">
+    <h2 id="diseaseName">Disease: </h2>
+    <p id="description"></p>
+    <p id="treatment"></p>
+    <p id="medication"></p>
+  </div>
+
+  <script>
+    function generateReport() {
+      const fileInput = document.getElementById('imageInput');
+      const report = document.getElementById('reportSection');
+      const diseaseName = document.getElementById('diseaseName');
+      const description = document.getElementById('description');
+      const treatment = document.getElementById('treatment');
+      const medication = document.getElementById('medication');
+
+      if (!fileInput.files.length) {
+        alert("Please upload an image first.");
+        return;
+      }
+
+      const fileName = fileInput.files[0].name.toLowerCase();
+
+      let diagnosis = {};
+
+      if (fileName.includes("/normal eye.jpg")) {
+        diagnosis = {
+          name: "Normal Retina",
+          desc: "The retina appears healthy with no visible signs of disease.",
+          treat: "No treatment required. Maintain regular check-ups and healthy vision habits.",
+          meds: "Not applicable."
+        };
+      } else if (fileName.includes("conjunctivitis.jpg")) {
+        diagnosis = {
+          name: "Conjunctivitis (Pink Eye)",
+          desc: "An inflammation or infection of the conjunctiva, commonly caused by bacteria, viruses, or allergens.",
+          treat: "Use of lubricating eye drops, cold compress, and avoiding irritants.",
+          meds: "Antibiotic eye drops for bacterial conjunctivitis (e.g., ciprofloxacin)."
+        };
+      } else if (fileName.includes("/cataract.jpg")) {
+        diagnosis = {
+          name: "Cataract",
+          desc: "Clouding of the eye lens causing blurry vision, typically due to aging.",
+          treat: "Early stages managed with stronger glasses. Surgery required in advanced cases.",
+          meds: "No effective medications; surgery is the standard treatment."
+        };
+      } else if (fileName.includes("/entropion.jpg")) {
+        diagnosis = {
+          name: "Entropion",
+          desc: "A condition where the eyelid folds inward causing irritation from eyelashes rubbing the eye.",
+          treat: "Lubricating eye drops, taping the eyelid. Surgery in persistent cases.",
+          meds: "Artificial tears, antibiotic ointments to prevent infection."
+        };
+      } else {
+        diagnosis = {
+          name: "Unknown",
+          desc: "The uploaded image could not be matched. Please ensure the file name includes the disease name.",
+          treat: "Try uploading a different image.",
+          meds: "N/A"
+        };
+      }
+
+      diseaseName.textContent = "Disease: " + diagnosis.name;
+      description.textContent = "Description: " + diagnosis.desc;
+      treatment.textContent = "Treatment: " + diagnosis.treat;
+      medication.textContent = "Medication: " + diagnosis.meds;
+      report.style.display = "block";
+    }
+  </script>
+
+</div>
+  <a href="{{ url_for('admin_dashboard') }}">
+  <button class="back-button" onclick="location.href='/admin_dashboard'">Back to Dashboard</button>
+</a>
+
+</body>
+</html>

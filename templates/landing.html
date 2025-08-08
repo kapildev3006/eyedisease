@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vision Dx - Early Detection Clear Vision</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            z-index: -1;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 1.2rem;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            min-height: 56px;
+        }
+
+        .navbar.scrolled {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 0.8rem 2rem;
+        }
+
+        .navbar h1 {
+            color: #667eea;
+            font-size: 2rem;
+            font-weight: 700;
+            animation: logoGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes logoGlow {
+            from { text-shadow: 0 0 5px #667eea; }
+            to { text-shadow: 0 0 20px #667eea, 0 0 30px #667eea; }
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+        }
+
+        .nav-links ul {
+            display: flex;
+            gap: 0.2rem;
+            margin: 0;
+            padding: 0;
+            align-items: center;
+            list-style: none;
+        }
+
+        .nav-links li {
+            position: relative;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            margin: 0 0.25rem;
+            z-index: 1;
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.5s;
+            z-index: -1;
+        }
+
+        .nav-links a:hover::before {
+            left: 100%;
+        }
+
+        .nav-links a:hover {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            z-index: 10;
+        }
+
+        /* Active state for current page */
+        .nav-links a.active {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            position: relative;
+        }
+
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 3px;
+            background: white;
+            border-radius: 2px;
+            animation: activePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes activePulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h2 {
+            font-size: 3.5rem;
+            color: white;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: slideInLeft 1s ease-out 0.5s both;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin: 2rem 0;
+            line-height: 1.8;
+            animation: slideInRight 1s ease-out 0.7s both;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 1s ease-out 1s both;
+        }
+
+        .cta-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .cta-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .cta-btn:hover::before {
+            left: 100%;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.6);
+        }
+
+        /* Features Section */
+        .section {
+            padding: 5rem 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            margin: 2rem 0;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .section h2 {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: #667eea;
+            font-size: 2.5rem;
+            position: relative;
+        }
+
+        .section h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1) rotate(5deg);
+            color: white;
+        }
+
+        .feature-card:hover h3,
+        .feature-card:hover p {
+            color: white;
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 1rem;
+            color: #667eea;
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .feature-card p {
+            color: #666;
+            line-height: 1.6;
+            transition: color 0.3s ease;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 20px;
+            margin: 2rem 0;
+        }
+
+        .contact-section h2 {
+            color: white;
+        }
+
+        .contact-section h2::after {
+            background: white;
+        }
+
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            background: white;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+            transform: scale(1.02);
+        }
+
+        .submit-btn {
+            background: white;
+            color: #667eea;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(45deg, #333, #555);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        /* Alert Styles */
+        .alert {
+            padding: 1rem 2rem;
+            margin: 1rem 2rem;
+            border-radius: 10px;
+            animation: slideInDown 0.5s ease-out;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .alert-success {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: white;
+        }
+
+        .alert-warning {
+            background: linear-gradient(45deg, #ffc107, #fd7e14);
+            color: white;
+        }
+
+        .alert-info {
+            background: linear-gradient(45deg, #17a2b8, #20c997);
+            color: white;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+            }
+
+            .nav-links ul {
+                gap: 0.25rem;
+            }
+
+            .nav-links a {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.9rem;
+            }
+
+            .hero h2 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding: 3rem 1rem;
+            }
+        }
+
+        /* Additional hover isolation */
+        .nav-links a:focus {
+            outline: none;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            z-index: 10;
+        }
+
+        /* Scroll Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Floating Animation */
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Fallback for browsers that don't support backdrop-filter */
+        @supports not (backdrop-filter: blur(10px)) {
+            .navbar {
+                background: rgba(255, 255, 255, 0.98);
+            }
+            
+            .hero::before {
+                background: rgba(255, 255, 255, 0.2);
+            }
+            
+            .section {
+                background: rgba(255, 255, 255, 0.98);
+            }
+        }
+
+        /* Ensure animations work on all devices */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+        .welcome-msg {
+            position: fixed;
+            top: 24px;
+            right: 36px;
+            background: rgba(255,255,255,0.92);
+            color: #764ba2;
+            font-family: 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            padding: 12px 28px 12px 18px;
+            border-radius: 30px;
+            box-shadow: 0 4px 18px rgba(102,126,234,0.13);
+            z-index: 2001;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: fadeInDown 1s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .welcome-msg .fa-user-circle {
+            font-size: 1.5rem;
+            color: #667eea;
+            margin-right: 6px;
+        }
+        .welcome-msg .client-name {
+            font-weight: 900;
+            color: #00bfae;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.07);
+        }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @media (max-width: 600px) {
+            .welcome-msg { right: 8px; top: 8px; font-size: 0.98rem; padding: 8px 14px 8px 10px; }
+            .welcome-msg .fa-user-circle { font-size: 1.1rem; }
+        }
+        .navbar-welcome {
+            background: none;
+            box-shadow: none;
+            padding: 0 0 0 1.2rem;
+            font-size: 1.08rem;
+            color: #764ba2;
+            position: static;
+            animation: none;
+        }
+        .navbar-welcome .fa-user-circle {
+            font-size: 1.3rem;
+            color: #667eea;
+            margin-right: 4px;
+        }
+        .navbar-welcome .client-name {
+            font-weight: 900;
+            color: #00bfae;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.07);
+        }
+        @media (max-width: 900px) {
+            .nav-links ul {
+                flex-direction: column;
+                background: rgba(255,255,255,0.98);
+                position: fixed;
+                top: 56px;
+                right: 0;
+                width: 210px;
+                height: calc(100vh - 56px);
+                box-shadow: -2px 0 18px rgba(102,126,234,0.13);
+                border-radius: 0 0 0 18px;
+                padding: 1.2rem 0;
+                transform: translateX(100%);
+                transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+                z-index: 1050;
+            }
+            .nav-links ul.open {
+                transform: translateX(0);
+            }
+            .nav-toggle-label {
+                display: flex;
+            }
+            .nav-links {
+                gap: 0;
+            }
+        }
+        .nav-toggle:checked ~ .nav-links ul {
+            transform: translateX(0);
+        }
+        .profile-dropdown {
+            display: none;
+            position: absolute;
+            top: 110%;
+            right: 0;
+            z-index: 3000;
+            min-width: 240px;
+        }
+        .profile-dropdown.open {
+            display: block;
+            animation: fadeInDown 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .profile-dropdown-card {
+            background: rgba(255,255,255,0.98);
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(102,126,234,0.18), 0 1.5px 8px rgba(0,0,0,0.08);
+            padding: 28px 24px 18px 24px;
+            text-align: center;
+            min-width: 220px;
+        }
+        .profile-dropdown-card .profile-icon {
+            font-size: 2.5rem;
+            color: #667eea;
+            margin-bottom: 10px;
+            animation: floating 3s ease-in-out infinite;
+        }
+        .profile-dropdown-card .profile-name {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 900;
+            color: #764ba2;
+            margin-bottom: 4px;
+        }
+        .profile-dropdown-card .profile-email {
+            font-size: 1rem;
+            color: #333;
+            margin-bottom: 14px;
+        }
+        .profile-link {
+            display: block;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            color: #fff;
+            border: none;
+            border-radius: 30px;
+            padding: 8px 0;
+            font-size: 1rem;
+            font-weight: 700;
+            text-decoration: none;
+            margin: 8px 0 0 0;
+            box-shadow: 0 2px 8px rgba(102,126,234,0.13);
+            transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+        }
+        .profile-link:hover {
+            background: linear-gradient(90deg, #764ba2, #00e6d0);
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 4px 16px rgba(102,126,234,0.18);
+        }
+        .logout-link { background: #fff; color: #764ba2; border: 2px solid #764ba2; margin-top: 10px; }
+        .logout-link:hover { background: #764ba2; color: #fff; }
+        .profile-btn-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            margin-left: 1.2rem;
+        }
+        .profile-btn {
+            background: none;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            font-size: 2rem;
+            color: #667eea;
+            padding: 0 0.2rem;
+            border-radius: 50%;
+            transition: background 0.2s;
+        }
+        .profile-btn:hover, .profile-btn:focus {
+            background: rgba(102,126,234,0.08);
+        }
+        .profile-dropdown {
+            display: none;
+            position: fixed;
+            top: 70px;
+            right: 36px;
+            z-index: 3000;
+            min-width: 240px;
+        }
+        .profile-dropdown.open {
+            display: block;
+            animation: fadeInDown 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        @media (max-width: 600px) {
+            .profile-dropdown { right: 8px; top: 56px; min-width: 180px; }
+        }
+        .profile-welcome {
+            font-size: 1.08rem;
+            color: #667eea;
+            font-family: 'Montserrat',sans-serif;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+        .profile-btn-welcome {
+            font-size: 1.08rem;
+            color: #764ba2;
+            font-family: 'Montserrat',sans-serif;
+            font-weight: 700;
+            margin-left: 8px;
+            letter-spacing: 0.5px;
+            vertical-align: middle;
+        }
+        @media (max-width: 600px) {
+            .profile-btn-welcome { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="animated-bg"></div>
+    <!-- Welcome message in top right corner -->
+
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+        <h1><i class="fas fa-eye"></i> Vision Dx</h1>
+        <input type="checkbox" id="nav-toggle" class="nav-toggle" hidden>
+        <label for="nav-toggle" class="nav-toggle-label">
+            <span></span>
+            <span></span>
+            <span></span>
+        </label>
+        <div class="nav-links" id="navLinks">
+            <ul>
+                <li><a href="{{ url_for('landing') }}" class="active"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="{{ url_for('consultation') }}"><i class="fas fa-stethoscope"></i> Consultation</a></li>
+                <li><a href="{{ url_for('assistant') }}"><i class="fas fa-robot"></i> Assistant</a></li>
+                <li><a href="https://www.apollopharmacy.in/" target="_blank"><i class="fas fa-pills"></i> Pharmacy</a></li>
+                <li><a href="{{ url_for('report') }}"><i class="fas fa-chart-line"></i> Report</a></li>
+                <li><a href="{{ url_for('feedback') }}"><i class="fas fa-comments"></i> Feedback</a></li>
+                <li><a href="{{ url_for('about') }}"><i class="fas fa-info-circle"></i> About</a></li>
+                <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </div>
+        {% if client_name %}
+        <div class="profile-btn-container">
+            <button class="profile-btn" id="profileBtn" aria-label="Open profile">
+                <i class="fas fa-user-circle"></i>
+                <span class="profile-btn-welcome">Welcome, <span class="client-name">{{ client_name }}</span></span>
+            </button>
+            <div class="profile-dropdown" id="profileDropdown">
+                <div class="profile-dropdown-card">
+                    <div class="profile-welcome">Welcome, <span class="client-name">{{ client_name }}</span>!</div>
+                    <div class="profile-icon"><i class="fas fa-user-circle"></i></div>
+                    <div class="profile-name">{{ client_name }}</div>
+                    <div class="profile-email"><i class="fas fa-envelope"></i> {{ session['email'] }}</div>
+                    <a href="{{ url_for('logout') }}" class="profile-link logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </nav>
+
+    <!-- Flash Messages -->
+    <div style="margin-top: 80px;">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        <i class="fas fa-info-circle"></i> {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h2 class="floating">Early Detection Clear Vision</h2>
+            <p>
+                Experience the future of eye care with our advanced AI-powered diagnosis system. 
+                Early detection is crucial for preventing vision loss and ensuring optimal eye health. 
+                Our cutting-edge technology provides accurate, instant diagnoses with personalized treatment recommendations.
+            </p>
+            <div class="cta-buttons">
+                <a href="{{ url_for('appointment') }}" class="cta-btn">
+                    <i class="fas fa-calendar-check"></i> Book Your Appointment
+                </a>
+                <a href="https://www.maxhealthcare.in/find-a-doctor" class="cta-btn" target="_blank">
+                    <i class="fas fa-user-md"></i> Book Your Consults
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Essential Features -->
+    <section class="section fade-in">
+        <h2>Essential Features</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-upload"></i>
+                </div>
+                <h3>Image Upload</h3>
+                <p>Upload an eye image for instant AI analysis and diagnosis.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h3>AI Detection</h3>
+                <p>Advanced AI algorithms detect diseases like conjunctivitis, cataract, dry eye, and more.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-bar"></i>
+                </div>
+                <h3>Diagnosis Display</h3>
+                <p>Get detailed diagnosis reports with confidence scores and explanations.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-pills"></i>
+                </div>
+                <h3>Treatment Suggestions</h3>
+                <p>Personalized treatment plans and prescription recommendations based on your diagnosis.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-leaf"></i>
+                </div>
+                <h3>Home Remedies</h3>
+                <p>Natural and home remedies tailored to your specific eye condition.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-video"></i>
+                </div>
+                <h3>Video Consultation</h3>
+                <p>Connect with real doctors through secure video consultations.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Enhancement Features -->
+    <section class="section fade-in">
+        <h2>Enhancement Features</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-history"></i>
+                </div>
+                <h3>Diagnosis History</h3>
+                <p>Track your eye health journey with comprehensive diagnosis history and reports.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <h3>Email Reports</h3>
+                <p>Receive detailed diagnosis reports directly to your email for easy access.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-universal-access"></i>
+                </div>
+                <h3>Accessibility</h3>
+                <p>Voice-over support, zoom features, and keyboard navigation for all users.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Innovative Features -->
+    <section class="section fade-in">
+        <h2>Unique & Innovative Features</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <h3>AI Chatbot</h3>
+                <p>Interactive conversational assistant for all your eye health questions and concerns.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <h3>Emergency SOS</h3>
+                <p>Immediate notification system to alert doctors or emergency services when needed.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-question-circle"></i>
+                </div>
+                <h3>Symptom Checker</h3>
+                <p>Interactive Q&A system for users who can't upload images but need guidance.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-eye"></i>
+                </div>
+                <h3>Eye Exercises</h3>
+                <p>Gamified relaxation exercises and eye care routines for better vision health.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-bell"></i>
+                </div>
+                <h3>Reminders</h3>
+                <p>Smart notifications for eye drops, rest breaks, and eye yoga sessions.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-microphone"></i>
+                </div>
+                <h3>Voice Navigation</h3>
+                <p>Navigate the platform using voice commands - perfect for elderly users.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Us Section -->
+    <section class="section contact-section fade-in">
+        <h2>Contact Us</h2>
+        <div class="contact-form">
+            <form action="/contact" method="post">
+                <div class="form-group">
+                    <input type="text" name="name" placeholder="Your Name" required class="form-input">
+                </div>
+                <div class="form-group">
+                    <input type="email" name="email" placeholder="Your Email" required class="form-input">
+                </div>
+                <div class="form-group">
+                    <textarea name="message" rows="5" placeholder="Your Message" required class="form-input"></textarea>
+                </div>
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-paper-plane"></i> Send Message
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p><i class="fas fa-heart"></i> By Solution Slayers X MAX Hospital</p>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        let observer;
+        
+        // Check if IntersectionObserver is supported
+        if ('IntersectionObserver' in window) {
+            observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, observerOptions);
+        }
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add loading animation
+        window.addEventListener('load', function() {
+            document.body.style.opacity = '1';
+        });
+
+        // Error handling for missing elements
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if navbar exists before adding scroll listener
+            const navbar = document.getElementById('navbar');
+            if (navbar) {
+                window.addEventListener('scroll', function() {
+                    if (window.scrollY > 50) {
+                        navbar.classList.add('scrolled');
+                    } else {
+                        navbar.classList.remove('scrolled');
+                    }
+                });
+            }
+
+            // Check if observer is supported
+            if ('IntersectionObserver' in window) {
+                const fadeElements = document.querySelectorAll('.fade-in');
+                fadeElements.forEach(el => observer.observe(el));
+            } else {
+                // Fallback for browsers that don't support IntersectionObserver
+                const fadeElements = document.querySelectorAll('.fade-in');
+                fadeElements.forEach(el => el.classList.add('visible'));
+            }
+
+            // Set active navigation link based on current page
+            setActiveNavLink();
+        });
+
+        // Function to set active navigation link
+        function setActiveNavLink() {
+            const currentPath = window.location.pathname;
+            const navLinks = document.querySelectorAll('.nav-links a');
+            
+            navLinks.forEach(link => {
+                // Remove any existing active class
+                link.classList.remove('active');
+                
+                // Check if this link matches the current page
+                const linkPath = link.getAttribute('href');
+                if (linkPath === currentPath || 
+                    (currentPath === '/' && linkPath === '/landing') ||
+                    (currentPath === '/landing' && linkPath === '/landing')) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        // Hamburger menu toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const navToggle = document.getElementById('nav-toggle');
+            const navLinksUl = document.querySelector('.nav-links ul');
+            navToggle && navToggle.addEventListener('change', function() {
+                if (navToggle.checked) {
+                    navLinksUl.classList.add('open');
+                } else {
+                    navLinksUl.classList.remove('open');
+                }
+            });
+
+            // Profile dropdown logic (new approach)
+            const profileBtn = document.getElementById('profileBtn');
+            const profileDropdown = document.getElementById('profileDropdown');
+            if (profileBtn && profileDropdown) {
+                profileBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    profileDropdown.classList.toggle('open');
+                });
+                document.addEventListener('click', function(e) {
+                    if (!profileDropdown.contains(e.target) && e.target !== profileBtn) {
+                        profileDropdown.classList.remove('open');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

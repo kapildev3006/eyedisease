@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Appointments - EyeCare AI</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f8fb;
+    }
+
+    .header {
+      background-color: #0077cc;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      font-size: 24px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 20px;
+    }
+
+    .appointment-card {
+      background-color: white;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 12px;
+      box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+    }
+
+    .appointment-card h3 {
+      margin: 0 0 10px;
+      color: #0077cc;
+    }
+
+    .info {
+      margin: 10px 0;
+      font-size: 16px;
+    }
+
+    .buttons {
+      margin-top: 15px;
+    }
+
+    .map-btn, .complete-btn {
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+
+    .map-btn {
+      background-color: #009688;
+      color: white;
+    }
+
+    .complete-btn {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .complete-btn.completed {
+      background-color: gray;
+      cursor: default;
+    }
+
+    .back-button {
+    margin: 20px;
+    padding: 10px 20px;
+    background-color: #0077cc;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  .back-button:hover {
+    background-color: #005fa3;
+  }
+  </style>
+</head>
+<body>
+
+  <div class="header">Appointments</div>
+
+  <div class="container">
+
+    <div class="appointment-card" id="appointment1">
+      <h3>Patient: Madhulika Singh</h3>
+      <p class="info">Address: 123 Vision Street, New Delhi</p>
+      <p class="info">Scheduled Time: 11:30 AM, April 12, 2025</p>
+      <div class="buttons">
+        <a class="map-btn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=123+Vision+Street+New+Delhi">View on Map</a>
+        <button class="complete-btn" onclick="markComplete(this)">Mark Complete</button>
+      </div>
+    </div>
+
+    <div class="appointment-card" id="appointment2">
+      <h3>Patient: Manvi</h3>
+      <p class="info">Address: 56 EyeCare Colony, Mumbai</p>
+      <p class="info">Scheduled Time: 2:00 PM, April 12, 2025</p>
+      <div class="buttons">
+        <a class="map-btn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=56+EyeCare+Colony+Mumbai">View on Map</a>
+        <button class="complete-btn" onclick="markComplete(this)">Mark Complete</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function markComplete(button) {
+      button.textContent = "Completed";
+      button.classList.add("completed");
+      button.disabled = true;
+    }
+  </script>
+
+<a href="admin.html">
+  <button class="back-button">Back to Dashboard</button>
+</a>
+</body>
+</html>
