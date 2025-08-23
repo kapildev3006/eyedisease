@@ -18,7 +18,7 @@ app.config['MYSQL_DB'] = 'eyecare_ai'
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'your_email@gmail.com'  # Replace with your email
+app.config['MAIL_USERNAME'] = 'kdev202130@gmail.com'  # Replace with your email
 app.config['MAIL_PASSWORD'] = 'your_email_password'   # Replace with your password or app password
 
 mysql = MySQL(app)
@@ -27,38 +27,28 @@ mail = Mail(app)
 # Home Page
 @app.route('/')
 def home():
-    unread_count = 0
-    if session.get('loggedin'):
-        try:
-            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute('SELECT COUNT(*) AS c FROM notifications WHERE user_id=%s AND is_read=0', (session['id'],))
-            row = cursor.fetchone()
-            unread_count = (row['c'] if row else 0) or 0
-            cursor.close()
-        except Exception:
-            unread_count = 0
-    flash('Welcome to Vision DX!','success')
-    return render_template('main.html', unread_count=unread_count)
+    return redirect(url_for('landing'))
 
 # Login
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        email = request.form.get('email')
+        email_or_mobile = request.form.get('email_or_mobile')
         password = request.form.get('password')
 
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM users WHERE email = %s', (email,))
+        cursor.execute('SELECT * FROM users WHERE email = %s OR mobile = %s', (email_or_mobile, email_or_mobile))
         user = cursor.fetchone()
 
         if user and check_password_hash(user['password'], password):
             session['loggedin'] = True
             session['id'] = user['id']
             session['email'] = user['email']
-            flash('Welcome to Vision DX!','success')
+            session['mobile'] = user['mobile']
+            flash('Login successful!', 'success')
             return redirect(url_for('landing'))
         else:
-            flash('Invalid email or password.', 'danger')
+            flash('Invalid email/mobile or password.', 'danger')
 
     return render_template('login.html')
 
@@ -68,21 +58,22 @@ def register():
     if request.method == 'POST':
         name = request.form.get('name')
         email = request.form.get('email')
+        mobile = request.form.get('mobile')
         password = request.form.get('password')
 
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM users WHERE email = %s', (email,))
+        cursor.execute('SELECT * FROM users WHERE email = %s OR mobile = %s', (email, mobile))
         account = cursor.fetchone()
 
         if account:
-            flash('Account already exists with this email!', 'warning')
-        elif not name or not email or not password:
+            flash('Account already exists with this email or mobile!', 'warning')
+        elif not name or not email or not mobile or not password:
             flash('Please fill out all fields.', 'warning')
         else:
             hashed_pw = generate_password_hash(password)
             cursor.execute(
-                'INSERT INTO users (name, email, password) VALUES (%s, %s, %s)',
-                (name, email, hashed_pw)
+                'INSERT INTO users (name, email, mobile, password) VALUES (%s, %s, %s, %s)',
+                (name, email, mobile, hashed_pw)
             )
             mysql.connection.commit()
             flash('Registration successful! Please log in.', 'success')
@@ -118,23 +109,22 @@ def admin_login():
 
     error = None
     if request.method == 'POST':
-        identifier = request.form.get('username')
-        password = request.form.get('password')
+        username = request.form['username']
+        password = request.form['password']
 
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute("SELECT * FROM admin WHERE username = %s OR email = %s", (identifier, identifier))
+        cursor.execute("SELECT * FROM admin WHERE username = %s", (username,))
         admin = cursor.fetchone()
         cursor.close()
 
-        if admin and check_password_hash(admin['password_hash'], password):
+        if admin and check_password_hash(admin['password'], password):  # Use hashed password comparison
             session['admin_loggedin'] = True
             session['admin_id'] = admin['id']
             session['admin_username'] = admin['username']
-            session['admin_role'] = admin['role']
             flash('Admin login successful!', 'success')
-            return redirect(url_for('admin'))
+            return redirect(url_for('admin_dashboard'))
         else:
-            error = 'Invalid username/email or password'
+            error = 'Invalid username or password'
 
     return render_template('admin_login.html', error=error)
 
@@ -147,26 +137,15 @@ def admin_dashboard():
 
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
-    cursor.execute("SELECT * FROM appointments ORDER BY id DESC")
-    appointments = cursor.fetchall()
-    cursor.execute("SELECT id, name, email FROM users ORDER BY id DESC")
-    users = cursor.fetchall()
-    cursor.execute("SELECT * FROM feedback ORDER BY id DESC")
-    feedbacks = cursor.fetchall()
-    try:
-        cursor.execute("SELECT * FROM contact ORDER BY id DESC")
-        contacts = cursor.fetchall()
-    except Exception:
-        contacts = []
-
-    # Also compute counts for compatibility
+    # Get completed and pending appointment counts
     cursor.execute("SELECT COUNT(*) as count FROM appointments WHERE status = 'completed'")
-    completed = cursor.fetchone()['count'] if cursor.rowcount != -1 else 0
+    completed = cursor.fetchone()['count']
+
     cursor.execute("SELECT COUNT(*) as count FROM appointments WHERE status = 'pending'")
-    pending = cursor.fetchone()['count'] if cursor.rowcount != -1 else 0
+    pending = cursor.fetchone()['count']
 
     cursor.close()
-    return render_template('admin.html', appointments=appointments, users=users, feedbacks=feedbacks, contacts=contacts, completed=completed, pending=pending)
+    return render_template('admin_dashboard.html', completed=completed, pending=pending)
 
 # Admin Logout
 @app.route('/admin-logout')
@@ -182,15 +161,14 @@ def admin_logout():
 # Dashboard/Main Page
 @app.route('/landing')
 def landing():
+    client_name = ''
     if 'loggedin' in session:
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECT name FROM users WHERE id = %s', (session['id'],))
         user = cursor.fetchone()
         client_name = user['name'] if user else ''
         cursor.close()
-        return render_template('landing.html', client_name=client_name)
-    flash('Please log in first.', 'warning')
-    return redirect(url_for('login'))
+    return render_template('landing.html', client_name=client_name)
 
 @app.route('/appointment', methods=['GET', 'POST'])
 def appointment():
@@ -240,70 +218,25 @@ def contact():
 
 @app.route('/update-status', methods=['POST'])
 def update_status():
-    if not session.get('admin_loggedin'):
-        flash('Admin access only. Please log in as admin.', 'warning')
-        return redirect(url_for('admin_login'))
+    if 'loggedin' not in session:
+        return redirect(url_for('login'))
 
     appointment_id = request.form.get('appointment_id')
-    new_status = (request.form.get('status') or '').strip().lower()
+    new_status = request.form.get('status')
 
-    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    # Fetch appointment for context
-    cursor.execute('SELECT id, user_id, name, email, appointment_date, appointment_time FROM appointments WHERE id=%s', (appointment_id,))
-    appt = cursor.fetchone()
-
+    cursor = mysql.connection.cursor()
     cursor.execute("UPDATE appointments SET status = %s WHERE id = %s", (new_status, appointment_id))
     mysql.connection.commit()
-
-    # Send email on approved/declined
-    if appt and new_status in ('approved', 'declined'):
-        user_email = appt.get('email')
-        if user_email:
-            try:
-                subj = 'Your appointment has been approved' if new_status == 'approved' else 'Your appointment has been declined'
-                body = f"Hello {appt.get('name','User')},\n\nYour appointment on {appt.get('appointment_date')} at {appt.get('appointment_time')} has been {new_status}.\n\nRegards, Vision DX"
-                msg = Message(subj, sender=app.config['MAIL_USERNAME'], recipients=[user_email])
-                msg.body = body
-                mail.send(msg)
-            except Exception:
-                pass
-        # Insert notification if table exists
-        try:
-            cursor.execute(
-                'INSERT INTO notifications (user_id, title, body) VALUES (%s, %s, %s)',
-                (appt.get('user_id'), f'Appointment {new_status.title()}', f"Your appointment on {appt.get('appointment_date')} was {new_status}.")
-            )
-            mysql.connection.commit()
-        except Exception:
-            mysql.connection.rollback()
-            pass
-    cursor.close()
-
     flash("Appointment status updated!", "success")
     return redirect(url_for('admin_dashboard'))
-
-# Notifications page for users
-@app.route('/notifications')
-def notifications():
-    if not session.get('loggedin'):
-        return redirect(url_for('login'))
-    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    rows = []
-    try:
-        cursor.execute('SELECT id, title, body, created_at, is_read FROM notifications WHERE user_id=%s ORDER BY created_at DESC', (session['id'],))
-        rows = cursor.fetchall()
-        # Mark as read
-        cursor.execute('UPDATE notifications SET is_read=1 WHERE user_id=%s AND is_read=0', (session['id'],))
-        mysql.connection.commit()
-    except Exception:
-        rows = []
-    cursor.close()
-    return render_template('notifications.html', notifications=rows)
 
 
 # Feedback Form
 @app.route('/feedback', methods=['GET', 'POST'])
 def feedback():
+    if 'loggedin' not in session:
+        flash('Please loging.', 'warning')
+        return redirect(url_for('login'))
     if request.method == 'POST':
         name = request.form.get('name')
         email = request.form.get('email')
@@ -324,42 +257,24 @@ def feedback():
 # Static Pages
 @app.route('/consultation')
 def consultation():
+    if 'loggedin' not in session:
+        flash('Please log in for consultation', 'warning')
+        return redirect(url_for('login'))
     return render_template('consultation.html')
 
 @app.route('/assistant')
 def assistant():
+    if 'loggedin' not in session:
+        flash('Please logging', 'warning')
+        return redirect(url_for('login'))
     return render_template('assistant.html')
 
 @app.route('/about')
 def about():
+    if 'loggedin' not in session:
+        flash('Please logging', 'warning')
+        return redirect(url_for('login'))
     return render_template('about.html')
-
-@app.route('/upload')
-def upload():
-    if not session.get('admin_loggedin'):
-        flash('Admin access only. Please log in as admin.', 'warning')
-        return redirect(url_for('admin_login'))
-    return render_template('upload.html')
-
-@app.route('/history')
-def history():
-    if not session.get('admin_loggedin'):
-        flash('Admin access only. Please log in as admin.', 'warning')
-        return redirect(url_for('admin_login'))
-    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    cursor.execute("""
-        SELECT 
-            name,
-            appointment_date,
-            appointment_time,
-            COALESCE(message, '') AS diagnosis,
-            COALESCE(status, 'pending') AS status
-        FROM appointments
-        ORDER BY appointment_date DESC, appointment_time DESC
-    """)
-    visits = cursor.fetchall()
-    cursor.close()
-    return render_template('history.html', visits=visits)
 
 @app.route('/report')
 def report():
@@ -378,6 +293,55 @@ def admin_forgot_password():
         return redirect(url_for('admin_forgot_password'))
     return render_template('admin_forgot_password.html')
 
+# User Forgot Password
+@app.route('/forgot-password', methods=['GET', 'POST'])
+def forgot_password():
+    if request.method == 'POST':
+        email_or_mobile = request.form.get('email_or_mobile')
+        otp = request.form.get('otp')
+        new_password = request.form.get('new_password')
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+
+        # Step 1: Send OTP
+        if not otp and not new_password:
+            # Find user by email or mobile
+            cursor.execute('SELECT * FROM users WHERE email = %s OR mobile = %s', (email_or_mobile, email_or_mobile))
+            user = cursor.fetchone()
+            if not user:
+                flash('No account found with this email or mobile.', 'danger')
+                return render_template('forgot_password.html')
+            # Send OTP to email (for now)
+            otp_code = str(random.randint(100000, 999999))
+            session['forgot_otp'] = otp_code
+            session['forgot_user_id'] = user['id']
+            session['forgot_email'] = user['email']
+            msg = Message('Your Password Reset OTP', sender=app.config['MAIL_USERNAME'], recipients=[user['email']])
+            msg.body = f'Your OTP code for password reset is: {otp_code}'
+            try:
+                mail.send(msg)
+                flash('OTP sent to your registered email.', 'info')
+            except Exception as e:
+                flash(f'Failed to send OTP: {str(e)}', 'danger')
+            return render_template('forgot_password.html')
+
+        # Step 2: Verify OTP and set new password
+        elif otp and new_password:
+            if otp == session.get('forgot_otp'):
+                user_id = session.get('forgot_user_id')
+                hashed_pw = generate_password_hash(new_password)
+                cursor.execute('UPDATE users SET password = %s WHERE id = %s', (hashed_pw, user_id))
+                mysql.connection.commit()
+                session.pop('forgot_otp', None)
+                session.pop('forgot_user_id', None)
+                session.pop('forgot_email', None)
+                flash('Password reset successful! Please log in.', 'success')
+                return redirect(url_for('login'))
+            else:
+                flash('Invalid OTP. Please try again.', 'danger')
+                return render_template('forgot_password.html')
+
+    return render_template('forgot_password.html')
+
 
 # Logout
 @app.route('/logout')
@@ -387,46 +351,6 @@ def logout():
     return redirect(url_for('home'))
 
 
-# Admin Registration
-@app.route('/admin-register', methods=['GET', 'POST'])
-def admin_register():
-    error = None
-    if request.method == 'POST':
-        username = (request.form.get('username') or '').strip()
-        email = (request.form.get('email') or '').strip().lower()
-        password = request.form.get('password')
-
-        if not username or not email or not password:
-            error = 'All fields are required.'
-        else:
-            try:
-                password_hash = generate_password_hash(password)
-                cursor = mysql.connection.cursor()
-                cursor.execute(
-                    "INSERT INTO admin (username, email, password_hash) VALUES (%s, %s, %s)",
-                    (username, email, password_hash)
-                )
-                mysql.connection.commit()
-                cursor.close()
-                flash('Admin created successfully. Please log in.', 'success')
-                return redirect(url_for('admin_login'))
-            except Exception:
-                mysql.connection.rollback()
-                error = 'Username or Email already exists.'
-
-    return render_template('admin_register.html', error=error)
-
-# Admin Users - list only users data
-@app.route('/admin-users')
-def admin_users():
-    if not session.get('admin_loggedin'):
-        flash('Admin access only. Please log in as admin.', 'warning')
-        return redirect(url_for('admin_login'))
-    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    cursor.execute('SELECT id, name, email FROM users ORDER BY id DESC')
-    users = cursor.fetchall()
-    cursor.close()
-    return render_template('admin_users.html', users=users)
 
 
 # Run the app

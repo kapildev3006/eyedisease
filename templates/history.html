@@ -3,147 +3,124 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Visit History - Vision DX</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <title>Visit History - EyeCare AI</title>
   <style>
-    :root {
-      --indigo-500: #667eea;
-      --indigo-700: #4338ca;
-      --slate-900: #0f172a;
-      --slate-700: #334155;
-      --success: #22c55e;
-      --warning: #f59e0b;
-      --danger: #ef4444;
-      --white: #ffffff;
-    }
-
-    * { box-sizing: border-box; }
-    html, body { height: 100%; }
     body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f2f6fa;
       margin: 0;
-      font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-      background: linear-gradient(120deg, var(--indigo-500), var(--indigo-700));
-      background-size: 200% 200%;
-      animation: bgShift 16s ease-in-out infinite;
-      color: var(--slate-700);
-      overflow-x: hidden;
+      padding: 40px;
     }
-    @keyframes bgShift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
 
-    .glow { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
-    .blob { position: absolute; width: 48vmax; height: 48vmax; border-radius: 50%; filter: blur(28px) saturate(120%); opacity: .5; }
-    .b1 { background: radial-gradient(circle at 30% 30%, #a5b4fc66, transparent 60%); left: -10vmax; top: -8vmax; animation: float1 18s ease-in-out infinite alternate; }
-    .b2 { background: radial-gradient(circle at 70% 70%, #93c5fd66, transparent 60%); right: -8vmax; bottom: -10vmax; animation: float2 22s ease-in-out infinite alternate; }
-    @keyframes float1 { from { transform: translate(0,0) scale(1)} to { transform: translate(2vmax, 3vmax) scale(1.05)} }
-    @keyframes float2 { from { transform: translate(0,0) scale(1)} to { transform: translate(-2vmax, -3vmax) scale(1.06)} }
-
-    .page { position: relative; z-index: 1; padding: 22px clamp(16px, 3vw, 28px); }
-
-    .topbar {
-      display: flex; align-items: center; justify-content: space-between; gap: 12px;
-      background: rgba(255,255,255,0.15);
-      border: 1px solid rgba(255,255,255,0.25);
-      border-radius: 18px;
-      backdrop-filter: blur(10px) saturate(140%);
-      padding: 14px 18px;
-      box-shadow: 0 10px 28px rgba(0,0,0,0.12);
-      color: #f8fafc;
+    h2 {
+      text-align: center;
+      color: #0077cc;
+      margin-bottom: 30px;
     }
-    .topbar .title { display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.3px; }
-    .btn { appearance:none; border:0; cursor:pointer; border-radius:12px; padding:10px 14px; font-weight:700; display:inline-flex; align-items:center; gap:8px; text-decoration:none; }
-    .btn-outline { color:#f1f5f9; border:2px solid rgba(255,255,255,0.6); background:transparent; }
 
-    .filters { margin-top: 16px; display:flex; align-items:center; gap:12px; flex-wrap: wrap; }
-    .search { display:flex; align-items:center; gap:8px; background: rgba(255,255,255,0.92); border:1px solid rgba(0,0,0,0.06); border-radius:12px; padding:8px 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
-    .search input { border:0; outline:0; font: inherit; min-width: 220px; background: transparent; color: var(--slate-900); }
-
-    .chips { display:flex; gap:8px; flex-wrap: wrap; }
-    .chip { border-radius:999px; padding:8px 12px; font-weight:700; cursor:pointer; user-select:none; border:1px solid rgba(255,255,255,0.55); color:#f8fafc; }
-    .chip.active { background:#f8fafc; color:#111827; border-color: transparent; }
-
-    .grid { margin-top: 16px; display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
-    .card {
-      display:grid; gap:8px; align-content:start;
-      background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,255,255,0.78));
-      border:1px solid rgba(0,0,0,0.06);
-      border-radius:18px; padding:18px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.12);
-      transition: transform .14s cubic-bezier(.4,2,.6,1), box-shadow .2s;
+    .history-container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
-    .card:hover { transform: translateY(-3px) scale(1.01); box-shadow: 0 16px 34px rgba(0,0,0,0.18); }
-    .card .name { font-weight:800; color: var(--slate-900); }
-    .row { display:flex; align-items:center; gap:8px; color: #475569; }
 
-    .status { display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border-radius:999px; font-weight:800; color:#fff; }
-    .completed { background: linear-gradient(135deg, #16a34a, #22c55e); }
-    .pending { background: linear-gradient(135deg, #f59e0b, #fbbf24); animation: pulse 1.4s ease-in-out infinite; }
-    .missed { background: linear-gradient(135deg, #ef4444, #f43f5e); }
-    @keyframes pulse { 0%,100%{ transform:scale(1)} 50%{ transform:scale(1.05)} }
+    .visit {
+      border-bottom: 1px solid #e0e0e0;
+      padding: 15px 0;
+    }
 
-    @media (max-width: 600px) { .search input { min-width: 140px; } }
+    .visit:last-child {
+      border-bottom: none;
+    }
+
+    .visit h3 {
+      margin: 0;
+      color: #333;
+    }
+
+    .visit p {
+      margin: 5px 0;
+      color: #555;
+      font-size: 14px;
+    }
+
+    .status {
+      padding: 5px 12px;
+      border-radius: 6px;
+      color: white;
+      font-size: 12px;
+      display: inline-block;
+    }
+
+    .completed {
+      background-color: #28a745;
+    }
+
+    .pending {
+      background-color: #ffc107;
+    }
+
+    .missed {
+      background-color: #dc3545;
+    }
+
+    .back-button {
+    margin: 20px;
+    padding: 10px 20px;
+    background-color: #0077cc;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  .back-button:hover {
+    background-color: #005fa3;
+  }
   </style>
 </head>
 <body>
-  <div class="glow"><span class="blob b1"></span><span class="blob b2"></span></div>
-  <div class="page">
-    <header class="topbar">
-      <div class="title"><i class="fa-solid fa-clock-rotate-left"></i> Visit History</div>
-      <a class="btn btn-outline" href="{{ url_for('admin_dashboard') }}"><i class="fa-solid fa-gauge"></i> Back to Dashboard</a>
-    </header>
 
-    <section class="filters">
-      <div class="search">
-        <i class="fa-solid fa-magnifying-glass" style="color:#64748b"></i>
-        <input id="q" type="text" placeholder="Search by name or diagnosis..." oninput="applyFilters()" />
-      </div>
-      <div class="chips">
-        <div class="chip active" data-status="all" onclick="setStatus(this)">All</div>
-        <div class="chip" data-status="completed" onclick="setStatus(this)">Completed</div>
-        <div class="chip" data-status="pending" onclick="setStatus(this)">Pending</div>
-        <div class="chip" data-status="missed" onclick="setStatus(this)">Missed</div>
-      </div>
-    </section>
+  <h2>Patient Visit History</h2>
 
-    <section class="grid" id="visits">
-      {% for v in visits %}
-      {% set s = (v.status or 'pending')|lower %}
-      <article class="card" data-status="{{ s }}" data-name="{{ v.name }}" data-diagnosis="{{ v.diagnosis }}">
-        <div class="name"><i class="fa-solid fa-user"></i> {{ v.name }}</div>
-        <div class="row"><i class="fa-solid fa-calendar-day"></i> {{ v.appointment_date }}{% if v.appointment_time %}, {{ v.appointment_time }}{% endif %}</div>
-        <div class="row"><i class="fa-solid fa-stethoscope"></i> {{ v.diagnosis if v.diagnosis else 'N/A' }}</div>
-        <div class="row">
-          <span class="status {% if s=='completed' %}completed{% elif s=='missed' %}missed{% else %}pending{% endif %}">
-            {% if s=='completed' %}<i class="fa-solid fa-circle-check"></i> Completed
-            {% elif s=='missed' %}<i class="fa-solid fa-xmark"></i> Missed
-            {% else %}<i class="fa-solid fa-clock"></i> Pending{% endif %}
-          </span>
-        </div>
-      </article>
-      {% endfor %}
-    </section>
+  <div class="history-container">
+
+    <div class="visit">
+      <h3>Madhulika Singh</h3>
+      <p>Date: March 22, 2025</p>
+      <p>Diagnosis: Dry Eye Syndrome</p>
+      <p>Status: <span class="status completed">Completed</span></p>
+    </div>
+
+    <div class="visit">
+      <h3>Manvi Sharma</h3>
+      <p>Date: March 28, 2025</p>
+      <p>Diagnosis: Conjunctivitis</p>
+      <p>Status: <span class="status completed">Completed</span></p>
+    </div>
+
+    <div class="visit">
+      <h3>Hitt Jain</h3>
+      <p>Date: April 1, 2025</p>
+      <p>Diagnosis: Eye Infection</p>
+      <p>Status: <span class="status pending">Pending</span></p>
+    </div>
+
+    <div class="visit">
+      <h3>Devesh Sahoo</h3>
+      <p>Date: April 5, 2025</p>
+      <p>Diagnosis: Myopia</p>
+      <p>Status: <span class="status missed">Missed</span></p>
+    </div>
+
   </div>
+  <a href="{{ url_for('admin_dashboard') }}">
+  <button class="back-button" onclick="location.href='/admin_dashboard'">Back to Dashboard</button>
+</a>
 
-  <script>
-    let activeStatus = 'all';
-    function setStatus(el) {
-      document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-      el.classList.add('active');
-      activeStatus = el.getAttribute('data-status');
-      applyFilters();
-    }
-    function applyFilters() {
-      const q = (document.getElementById('q').value || '').toLowerCase();
-      const cards = document.querySelectorAll('#visits .card');
-      cards.forEach(card => {
-        const name = card.getAttribute('data-name').toLowerCase();
-        const diag = card.getAttribute('data-diagnosis').toLowerCase();
-        const status = card.getAttribute('data-status');
-        const matchesText = name.includes(q) || diag.includes(q);
-        const matchesStatus = activeStatus === 'all' || status === activeStatus;
-        card.style.display = (matchesText && matchesStatus) ? '' : 'none';
-      });
-    }
-  </script>
 </body>
 </html>

@@ -806,7 +806,10 @@
                 <li><a href="{{ url_for('report') }}"><i class="fas fa-chart-line"></i> Report</a></li>
                 <li><a href="{{ url_for('feedback') }}"><i class="fas fa-comments"></i> Feedback</a></li>
                 <li><a href="{{ url_for('about') }}"><i class="fas fa-info-circle"></i> About</a></li>
-                <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                {% if not client_name %}
+                <li><a href="{{ url_for('login') }}"><i class="fas fa-right-to-bracket"></i> Login</a></li>
+                <li><a href="{{ url_for('register') }}"><i class="fas fa-user-plus"></i> Register</a></li>
+                {% endif %}
             </ul>
         </div>
         {% if client_name %}
