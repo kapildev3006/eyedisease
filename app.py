@@ -7,22 +7,36 @@ import random
 import os
 
 app = Flask(__name__)
-app.secret_key = os.environ.get('SECRET_KEY', '81341f7075cc06a217a3ff65200329ed1066feed0873fa8aac08da37e6a87ed5')  # Replace with a strong, random secret key
 
+# ===============================
+# Secret Key
+# ===============================
+app.secret_key = os.environ.get(
+    'SECRET_KEY',
+    '81341f7075cc06a217a3ff65200329ed1066feed0873fa8aac08da37e6a87ed5'
+)
+
+# ===============================
 # MySQL Configuration
-app.config['MYSQL_HOST'] = os.environ.get('MYSQL_HOST', 'localhost')
-app.config['MYSQL_USER'] = os.environ.get('MYSQL_USER', 'root')
-app.config['MYSQL_PASSWORD'] = os.environ.get('MYSQL_PASSWORD', '202130')
+# ===============================
+app.config['MYSQL_HOST'] = os.environ.get('MYSQL_HOST', '127.0.0.1')   # Local fallback
+app.config['MYSQL_USER'] = os.environ.get('MYSQL_USER', 'root')       # Local user
+app.config['MYSQL_PASSWORD'] = os.environ.get('MYSQL_PASSWORD', '202130')  # Local password
 app.config['MYSQL_DB'] = os.environ.get('MYSQL_DB', 'eyecare_ai')
+app.config['MYSQL_PORT'] = int(os.environ.get('MYSQL_PORT', 3306))
 
-
+# ===============================
 # Flask-Mail configuration
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'kdev7830@gmail.com'  # Replace with your email
-app.config['MAIL_PASSWORD'] = 'kmwzakuuchugabaf'  # Replace with your password or app password
+# ===============================
+app.config['MAIL_SERVER'] = os.environ.get('MAIL_SERVER', 'smtp.gmail.com')
+app.config['MAIL_PORT'] = int(os.environ.get('MAIL_PORT', 587))
+app.config['MAIL_USE_TLS'] = os.environ.get('MAIL_USE_TLS', 'True') == 'True'
+app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME', 'kdev7830@gmail.com')
+app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD', 'kmwzakuuchugabaf')  # Gmail App Password
 
+# ===============================
+# Initialize extensions
+# ===============================
 mysql = MySQL(app)
 mail = Mail(app)
 
