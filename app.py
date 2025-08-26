@@ -4,22 +4,24 @@ import MySQLdb.cursors
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_mail import Mail, Message
 import random
+import os
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'  # Replace with a strong, random secret key
+app.secret_key = os.environ.get('SECRET_KEY', '81341f7075cc06a217a3ff65200329ed1066feed0873fa8aac08da37e6a87ed5')  # Replace with a strong, random secret key
 
 # MySQL Configuration
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = '202130'  # Replace with your actual MySQL password
-app.config['MYSQL_DB'] = 'eyecare_ai'
+app.config['MYSQL_HOST'] = os.environ.get('MYSQL_HOST', 'localhost')
+app.config['MYSQL_USER'] = os.environ.get('MYSQL_USER', 'root')
+app.config['MYSQL_PASSWORD'] = os.environ.get('MYSQL_PASSWORD', '202130')
+app.config['MYSQL_DB'] = os.environ.get('MYSQL_DB', 'eyecare_ai')
+
 
 # Flask-Mail configuration
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'kdev202130@gmail.com'  # Replace with your email
-app.config['MAIL_PASSWORD'] = 'your_email_password'   # Replace with your password or app password
+app.config['MAIL_USERNAME'] = 'kdev7830@gmail.com'  # Replace with your email
+app.config['MAIL_PASSWORD'] = os.environ.get('kmwzakuuchugabaf')   # Replace with your password or app password
 
 mysql = MySQL(app)
 mail = Mail(app)
@@ -29,7 +31,7 @@ mail = Mail(app)
 def home():
     return redirect(url_for('landing'))
 
-# Login
+# Login  
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
