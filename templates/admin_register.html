@@ -1,196 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Create Admin - Vision DX</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <style>
-    body {
-      min-height: 100vh;
-      background: linear-gradient(120deg, #bce3f5 0%, #667eea 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      margin: 0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-    }
-    .animated-bg {
-      position: fixed;
-      top: 0; left: 0; width: 100vw; height: 100vh;
-      background: linear-gradient(135deg, #bce3f5 0%, #667eea 100%);
-      z-index: 0;
-      filter: blur(2px);
-      animation: gradientMove 12s ease-in-out infinite alternate;
-    }
-    @keyframes gradientMove {
-      0% { background-position: 0% 50%; }
-      100% { background-position: 100% 50%; }
-    }
-    .admin-login-card {
-      position: relative;
-      z-index: 1;
-      background: rgba(255,255,255,0.85);
-      box-shadow: 0 8px 32px 0 rgba(31,38,135,0.18);
-      border-radius: 24px;
-      padding: 48px 36px 36px 36px;
-      max-width: 370px;
-      width: 100%;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      animation: fadeInDown 1s cubic-bezier(.4,2,.6,1);
-    }
-    @keyframes fadeInDown {
-      from { opacity: 0; transform: translateY(-60px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .admin-login-card .admin-icon {
-      background: linear-gradient(135deg, #667eea 0%, #bce3f5 100%);
-      color: #fff;
-      border-radius: 50%;
-      width: 70px;
-      height: 70px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2.5rem;
-      margin-bottom: 18px;
-      box-shadow: 0 2px 12px rgba(102,126,234,0.18);
-      animation: popIn 0.8s cubic-bezier(.4,2,.6,1);
-    }
-    @keyframes popIn {
-      0% { transform: scale(0.5); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
-    }
-    .admin-login-card h2 {
-      font-family: 'Poppins', Arial, sans-serif;
-      font-size: 2rem;
-      font-weight: 700;
-      color: #667eea;
-      margin-bottom: 18px;
-      letter-spacing: 1px;
-    }
-    .admin-login-card form { width: 100%; }
-    .form-group {
-      position: relative;
-      margin-bottom: 28px;
-      width: 100%;
-      max-width: 100%;
-      box-sizing: border-box;
-    }
-    .form-group input {
-      width: 100%;
-      box-sizing: border-box;
-      padding: 14px 12px 14px 44px;
-      border-radius: 12px;
-      border: 1.5px solid #bce3f5;
-      font-size: 1rem;
-      font-family: inherit;
-      background: rgba(255,255,255,0.7);
-      transition: border 0.2s;
-      outline: none;
-      display: block;
-    }
-    .form-group input:focus { border: 1.5px solid #667eea; }
-    .form-group label {
-      position: absolute;
-      left: 44px;
-      top: 10px;
-      font-size: 1rem;
-      color: #667eea;
-      pointer-events: none;
-      transition: 0.2s;
-      opacity: 0.7;
-      background: transparent;
-      padding: 0 2px;
-      box-sizing: border-box;
-    }
-    .form-group input:focus + label,
-    .form-group input:not(:placeholder-shown) + label {
-      top: -14px;
-      left: 12px;
-      font-size: 0.92rem;
-      color: #0077cc;
-      background: #fff;
-      padding: 0 6px;
-      border-radius: 6px;
-      opacity: 1;
-    }
-    .form-group .input-icon {
-      position: absolute;
-      left: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #bce3f5;
-      font-size: 1.2rem;
-    }
-    .admin-login-card button {
-      width: 100%;
-      padding: 14px;
-      background: linear-gradient(90deg, #667eea 0%, #0077cc 100%);
-      color: #fff;
-      border: none;
-      border-radius: 12px;
-      font-size: 1.1rem;
-      font-weight: 600;
-      box-shadow: 0 2px 12px rgba(102,126,234,0.12);
-      margin-top: 8px;
-      transition: background 0.2s, transform 0.2s;
-      cursor: pointer;
-    }
-    .admin-login-card button:hover {
-      background: linear-gradient(90deg, #0077cc 0%, #667eea 100%);
-      transform: translateY(-2px) scale(1.03);
-    }
-    .error-message, .alert-danger, .alert {
-      color: #e74c3c;
-      text-align: center;
-      margin-bottom: 12px;
-      font-size: 1rem;
-    }
-    @media (max-width: 500px) {
-      .admin-login-card { padding: 32px 8px; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Registration</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
-  <div class="animated-bg"></div>
-  <div class="admin-login-card">
-    <div class="admin-icon"><i class="fa-solid fa-user-gear"></i></div>
-    <h2>Create Admin</h2>
-    {% if error %}<div class="error-message"><i class="fa-solid fa-triangle-exclamation"></i> {{ error }}</div>{% endif %}
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        {% for category, message in messages %}
-          <div class="alert alert-{{ category }}">{{ message }}</div>
-        {% endfor %}
-      {% endif %}
-    {% endwith %}
-    <form method="POST" action="{{ url_for('admin_register') }}" autocomplete="off">
-      <div class="form-group">
-        <span class="input-icon"><i class="fa-solid fa-user"></i></span>
-        <input type="text" name="username" id="username" placeholder=" " required />
-        <label for="username">Username</label>
-      </div>
-      <div class="form-group">
-        <span class="input-icon"><i class="fa-solid fa-envelope"></i></span>
-        <input type="email" name="email" id="email" placeholder=" " required />
-        <label for="email">Email</label>
-      </div>
-      <div class="form-group">
-        <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
-        <input type="password" name="password" id="password" placeholder=" " minlength="8" required />
-        <label for="password"> Create Password</label>
-      </div>
-      <button type="submit"><i class="fa-solid fa-plus"></i> Create Admin</button>
-    </form>
-    <div style="width:100%;display:flex;justify-content:space-between;margin-top:8px;">
-      <a href="{{ url_for('admin_login') }}" style="color:#0077cc;font-size:0.98rem;text-decoration:underline;">Back to Login</a>
+    <div class="container">
+        <h2>Admin Registration</h2>
+        <form action="{{ url_for('admin_register') }}" method="post">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit" class="btn">Register</button>
+        </form>
     </div>
-  </div>
 </body>
-</html> 
+</html>

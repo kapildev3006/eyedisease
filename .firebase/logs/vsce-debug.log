@@ -1,0 +1,98 @@
+[debug] [2025-08-27T15:38:13.383Z] [Firebase Plugin] Activating Firebase extension.
+[info] [Firebase Plugin] Checked firebase-tools, is up to date!
+[debug] [2025-08-27T15:38:22.142Z] [Firebase Plugin] requireAuthWrapper
+[debug] [2025-08-27T15:38:22.147Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-08-27T15:38:22.149Z] > authorizing via signed-in user (kdev7830@gmail.com)
+[debug] [2025-08-27T15:38:22.165Z] Checked if tokens are valid: true, expires at: 1756312553785
+[debug] [2025-08-27T15:38:22.169Z] Checked if tokens are valid: true, expires at: 1756312553785
+[debug] [2025-08-27T15:38:22.171Z] [Firebase Plugin] User found:  kdev7830@gmail.com
+[info] [Firebase Plugin] (Core:Project) New user detected, fetching projects
+[debug] [2025-08-27T15:38:22.178Z] Checked if tokens are valid: true, expires at: 1756312553785
+[debug] [2025-08-27T15:38:22.183Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=1000
+[debug] [2025-08-27T15:38:22.229Z] [Firebase Plugin] VSCode notification server listening on port 40001
+[info] [Firebase Plugin] Starting Data Connect toolkit (version 2.11.2) on port 50001
+[debug] [2025-08-27T15:38:24.690Z] I0827 21:08:24.655879    9476 control.go:94] [/emulator/eyedisease dc8f] UpdateResources(): done
+Schema: sources: schema\schema.gql [2088B] 
+Connector "example": sources: example\queries.gql [1947B] example\mutations.gql [1301B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0827 21:08:24.655879    9476 control.go:94] [/emulator/eyedisease dc8f] UpdateResources(): done\nSchema: sources: schema\\schema.gql [2088B] \nConnector \"example\": sources: example\\queries.gql [1947B] example\\mutations.gql [1301B] \n"}}
+[debug] [2025-08-27T15:38:24.694Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"dataconnect"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2025-08-27T15:38:24.695Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"dataconnect"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2025-08-27T15:38:24.701Z] Starting Data Connect Emulator with command {"binary":"C:\\Users\\kdev7\\.cache\\firebase\\emulators\\dataconnect-emulator-2.11.2.exe","args":["--logtostderr","-v=2","dev","--listen=localhost:50001","--config_dir=c:\\Users\\kdev7\\OneDrive\\문서\\Desktop\\btech\\final projects\\eyedisease\\dataconnect","--enable_output_schema_extensions=true","--enable_output_generated_sdk=true"],"optionalArgs":["listen","config_dir","enable_output_schema_extensions","enable_output_generated_sdk"],"joinArgs":true,"shell":false,"port":9399} {"metadata":{"emulator":{"name":"dataconnect"},"message":"Starting Data Connect Emulator with command {\"binary\":\"C:\\\\Users\\\\kdev7\\\\.cache\\\\firebase\\\\emulators\\\\dataconnect-emulator-2.11.2.exe\",\"args\":[\"--logtostderr\",\"-v=2\",\"dev\",\"--listen=localhost:50001\",\"--config_dir=c:\\\\Users\\\\kdev7\\\\OneDrive\\\\문서\\\\Desktop\\\\btech\\\\final projects\\\\eyedisease\\\\dataconnect\",\"--enable_output_schema_extensions=true\",\"--enable_output_generated_sdk=true\"],\"optionalArgs\":[\"listen\",\"config_dir\",\"enable_output_schema_extensions\",\"enable_output_generated_sdk\"],\"joinArgs\":true,\"shell\":false,\"port\":9399}"}}
+[info] i  dataconnect: Data Connect Emulator logging to dataconnect-debug.log {"metadata":{"emulator":{"name":"dataconnect"},"message":"Data Connect Emulator logging to \u001b[1mdataconnect-debug.log\u001b[22m"}}
+[debug] [2025-08-27T15:38:25.498Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects 200
+[debug] [2025-08-27T15:38:25.499Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects [omitted]
+[debug] [2025-08-27T15:38:25.794Z] I0827 21:08:25.794386    3880 load.go:31] Reloading schema and connectors...
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0827 21:08:25.794386    3880 load.go:31] Reloading schema and connectors...\n"}}
+[debug] [2025-08-27T15:38:25.818Z] I0827 21:08:25.819176    3880 control.go:94] [/emulator/eyedisease f41f] UpdateResources(): done
+Schema: sources: schema\schema.gql [2088B] 
+Connector "example": sources: example\mutations.gql [1301B] example\queries.gql [1947B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0827 21:08:25.819176    3880 control.go:94] [/emulator/eyedisease f41f] UpdateResources(): done\nSchema: sources: schema\\schema.gql [2088B] \nConnector \"example\": sources: example\\mutations.gql [1301B] example\\queries.gql [1947B] \n"}}
+[debug] [2025-08-27T15:38:25.850Z] I0827 21:08:25.840070    3880 collector.go:107] schema extensions wrote into "c:\\Users\\kdev7\\OneDrive\\문서\\Desktop\\btech\\final projects\\eyedisease\\dataconnect\\.dataconnect\\schema"
+Generated sources: prelude.gql [73251B] 
+I0827 21:08:25.840070    3880 load.go:109] Finished reloading
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0827 21:08:25.840070    3880 collector.go:107] schema extensions wrote into \"c:\\\\Users\\\\kdev7\\\\OneDrive\\\\문서\\\\Desktop\\\\btech\\\\final projects\\\\eyedisease\\\\dataconnect\\\\.dataconnect\\\\schema\"\nGenerated sources: prelude.gql [73251B] \nI0827 21:08:25.840070    3880 load.go:109] Finished reloading\n"}}
+[debug] [2025-08-27T15:38:26.027Z] I0827 21:08:26.025749    3880 dev.go:102] Listening on address (HTTP + gRPC): 127.0.0.1:50001
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0827 21:08:26.025749    3880 dev.go:102] Listening on address (HTTP + gRPC): 127.0.0.1:50001\n"}}
+[debug] [2025-08-27T15:38:26.291Z] I0827 21:08:26.281417    3880 engine.go:171] [/emulator/eyedisease f41f] ExecuteGraphqlRead IntrospectionQuery: succeeded. 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0827 21:08:26.281417    3880 engine.go:171] [/emulator/eyedisease f41f] ExecuteGraphqlRead IntrospectionQuery: succeeded. \n"}}
+[debug] [2025-08-27T15:46:50.111Z] [Firebase Plugin] Value of process.env.MONOSPACE_ENV: undefined
+[debug] [2025-08-27T15:46:50.112Z] [Firebase Plugin] requireAuthWrapper
+[debug] [2025-08-27T15:46:50.114Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-08-27T15:46:50.114Z] > authorizing via signed-in user (kdev7830@gmail.com)
+[debug] [2025-08-27T15:46:50.116Z] Checked if tokens are valid: true, expires at: 1756312553785
+[debug] [2025-08-27T15:46:50.116Z] [Firebase Plugin] User found:  kdev7830@gmail.com
+[info] [Firebase Plugin] (Core:Project) New user detected, fetching projects
+[debug] [2025-08-27T15:46:50.119Z] Checked if tokens are valid: true, expires at: 1756312553785
+[debug] [2025-08-27T15:46:50.121Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=1000
+[debug] [2025-08-27T15:46:50.143Z] [Firebase Plugin] Value of process.env.MONOSPACE_ENV: undefined
+[debug] [2025-08-27T15:46:50.144Z] [Firebase Plugin] requireAuthWrapper
+[debug] [2025-08-27T15:46:50.146Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-08-27T15:46:50.146Z] > authorizing via signed-in user (kdev7830@gmail.com)
+[debug] [2025-08-27T15:46:50.148Z] Checked if tokens are valid: true, expires at: 1756312553785
+[debug] [2025-08-27T15:46:50.148Z] [Firebase Plugin] User found:  kdev7830@gmail.com
+[info] [Firebase Plugin] (Core:Project) New user detected, fetching projects
+[debug] [2025-08-27T15:46:50.151Z] Checked if tokens are valid: true, expires at: 1756312553785
+[debug] [2025-08-27T15:46:50.152Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=1000
+[debug] [2025-08-27T15:46:59.533Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects 200
+[debug] [2025-08-27T15:46:59.534Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects [omitted]
+[debug] [2025-08-27T15:46:59.602Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects 200
+[debug] [2025-08-27T15:46:59.602Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects [omitted]
+[info] [Firebase Plugin] Stopping Data Connect toolkit
+[debug] [2025-08-27T16:14:11.288Z] [Firebase Plugin] Activating Firebase extension.
+[info] [Firebase Plugin] Checked firebase-tools, is up to date!
+[debug] [2025-08-27T16:14:19.251Z] [Firebase Plugin] requireAuthWrapper
+[debug] [2025-08-27T16:14:19.253Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-08-27T16:14:19.253Z] > authorizing via signed-in user (kdev7830@gmail.com)
+[debug] [2025-08-27T16:14:19.259Z] Checked if tokens are valid: true, expires at: 1756312553785
+[debug] [2025-08-27T16:14:19.259Z] Checked if tokens are valid: true, expires at: 1756312553785
+[debug] [2025-08-27T16:14:19.259Z] [Firebase Plugin] User found:  kdev7830@gmail.com
+[info] [Firebase Plugin] (Core:Project) New user detected, fetching projects
+[debug] [2025-08-27T16:14:19.261Z] Checked if tokens are valid: true, expires at: 1756312553785
+[debug] [2025-08-27T16:14:19.265Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=1000
+[debug] [2025-08-27T16:14:19.280Z] [Firebase Plugin] VSCode notification server listening on port 40001
+[info] [Firebase Plugin] Starting Data Connect toolkit (version 2.11.2) on port 50001
+[debug] [2025-08-27T16:14:20.587Z] I0827 21:44:20.568575    2552 control.go:94] [/emulator/eyedisease 883a] UpdateResources(): done
+Schema: sources: schema\schema.gql [2088B] 
+Connector "example": sources: example\mutations.gql [1301B] example\queries.gql [1947B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0827 21:44:20.568575    2552 control.go:94] [/emulator/eyedisease 883a] UpdateResources(): done\nSchema: sources: schema\\schema.gql [2088B] \nConnector \"example\": sources: example\\mutations.gql [1301B] example\\queries.gql [1947B] \n"}}
+[debug] [2025-08-27T16:14:20.588Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"dataconnect"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2025-08-27T16:14:20.588Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"dataconnect"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2025-08-27T16:14:20.589Z] Starting Data Connect Emulator with command {"binary":"C:\\Users\\kdev7\\.cache\\firebase\\emulators\\dataconnect-emulator-2.11.2.exe","args":["--logtostderr","-v=2","dev","--listen=localhost:50001","--config_dir=c:\\Users\\kdev7\\OneDrive\\문서\\Desktop\\btech\\final projects\\eyedisease\\dataconnect","--enable_output_schema_extensions=true","--enable_output_generated_sdk=true"],"optionalArgs":["listen","config_dir","enable_output_schema_extensions","enable_output_generated_sdk"],"joinArgs":true,"shell":false,"port":9399} {"metadata":{"emulator":{"name":"dataconnect"},"message":"Starting Data Connect Emulator with command {\"binary\":\"C:\\\\Users\\\\kdev7\\\\.cache\\\\firebase\\\\emulators\\\\dataconnect-emulator-2.11.2.exe\",\"args\":[\"--logtostderr\",\"-v=2\",\"dev\",\"--listen=localhost:50001\",\"--config_dir=c:\\\\Users\\\\kdev7\\\\OneDrive\\\\문서\\\\Desktop\\\\btech\\\\final projects\\\\eyedisease\\\\dataconnect\",\"--enable_output_schema_extensions=true\",\"--enable_output_generated_sdk=true\"],\"optionalArgs\":[\"listen\",\"config_dir\",\"enable_output_schema_extensions\",\"enable_output_generated_sdk\"],\"joinArgs\":true,\"shell\":false,\"port\":9399}"}}
+[info] i  dataconnect: Data Connect Emulator logging to dataconnect-debug.log {"metadata":{"emulator":{"name":"dataconnect"},"message":"Data Connect Emulator logging to \u001b[1mdataconnect-debug.log\u001b[22m"}}
+[debug] [2025-08-27T16:14:21.389Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects 200
+[debug] [2025-08-27T16:14:21.390Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects [omitted]
+[debug] [2025-08-27T16:14:21.408Z] I0827 21:44:21.406960   22656 load.go:31] Reloading schema and connectors...
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0827 21:44:21.406960   22656 load.go:31] Reloading schema and connectors...\n"}}
+[debug] [2025-08-27T16:14:21.451Z] I0827 21:44:21.451479   22656 control.go:94] [/emulator/eyedisease fc64] UpdateResources(): done
+Schema: sources: schema\schema.gql [2088B] 
+Connector "example": sources: example\queries.gql [1947B] example\mutations.gql [1301B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0827 21:44:21.451479   22656 control.go:94] [/emulator/eyedisease fc64] UpdateResources(): done\nSchema: sources: schema\\schema.gql [2088B] \nConnector \"example\": sources: example\\queries.gql [1947B] example\\mutations.gql [1301B] \n"}}
+[debug] [2025-08-27T16:14:21.474Z] I0827 21:44:21.470452   22656 collector.go:107] schema extensions wrote into "c:\\Users\\kdev7\\OneDrive\\문서\\Desktop\\btech\\final projects\\eyedisease\\dataconnect\\.dataconnect\\schema"
+Generated sources: prelude.gql [73251B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0827 21:44:21.470452   22656 collector.go:107] schema extensions wrote into \"c:\\\\Users\\\\kdev7\\\\OneDrive\\\\문서\\\\Desktop\\\\btech\\\\final projects\\\\eyedisease\\\\dataconnect\\\\.dataconnect\\\\schema\"\nGenerated sources: prelude.gql [73251B] \n"}}
+[debug] [2025-08-27T16:14:21.474Z] I0827 21:44:21.470452   22656 load.go:109] Finished reloading
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0827 21:44:21.470452   22656 load.go:109] Finished reloading\n"}}
+[debug] [2025-08-27T16:14:21.594Z] I0827 21:44:21.592763   22656 dev.go:102] Listening on address (HTTP + gRPC): 127.0.0.1:50001
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0827 21:44:21.592763   22656 dev.go:102] Listening on address (HTTP + gRPC): 127.0.0.1:50001\n"}}
+[debug] [2025-08-27T16:14:21.735Z] I0827 21:44:21.731488   22656 engine.go:171] [/emulator/eyedisease fc64] ExecuteGraphqlRead IntrospectionQuery: succeeded. 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0827 21:44:21.731488   22656 engine.go:171] [/emulator/eyedisease fc64] ExecuteGraphqlRead IntrospectionQuery: succeeded. \n"}}
