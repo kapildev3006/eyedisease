@@ -26,11 +26,6 @@ app.config['MAIL_USE_TLS'] = os.environ.get('MAIL_USE_TLS', 'True') == 'True'
 app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME', 'kdev7830@gmail.com')
 app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD', 'kmwzakuuchugabaf')
 
-
-import os
-import json
-import firebase_admin
-from firebase_admin import credentials, firestore
 db = None
 firebase_initialized = False
 
@@ -39,8 +34,9 @@ try:
     firebase_creds_env = os.environ.get("FIREBASE_CREDENTIALS")
 
     if firebase_creds_env:
-        # If FIREBASE_CREDENTIALS is set, use it
-        cred = credentials.Certificate(firebase_creds_env)
+        # Parse JSON string into a Python dict
+        cred_dict = json.loads(firebase_creds_env)
+        cred = credentials.Certificate(cred_dict)
         print("Using Firebase credentials from environment variable.")
     else:
         # Fallback: use local JSON file
@@ -61,10 +57,9 @@ try:
 
 except Exception as e:
     print(f"Error initializing Firebase: {e}")
+
+# Initialize Flask-Mail
 mail = Mail(app)
-# Load Firebase credentials from environment variable
-
-
 @app.route('/')
 def home():
     return redirect(url_for('landing'))
@@ -510,6 +505,6 @@ def admin():
     return render_template('admin.html', appointments=appointments, users=users, feedbacks=feedbacks, contacts=contacts)
 
 if __name__ == '__main__':
-    # For local development, you can use app.run.
-    # For production on Render, Gunicorn will be used.
-    app.run(debug=True)
+    # Use PORT from environment for Render, fallback to 5000 locally
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, debug=True)  # debug=True only for local testing
