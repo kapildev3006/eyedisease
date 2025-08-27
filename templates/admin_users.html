@@ -1,150 +1,141 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Users - Admin</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_styles.css') }}">
   <style>
+    /* Reset and body */
+    * { margin:0; padding:0; box-sizing:border-box; }
     body {
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      min-height: 100vh;
-      display: flex; justify-content: center; align-items: center;
+      font-family:"Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg,#667eea,#764ba2);
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
       animation: fadeIn 1s ease-in-out;
     }
 
+    /* Container */
     .admin-container {
-      display: flex;
-      width: 95%; max-width: 1300px;
-      background: rgba(255, 255, 255, 0.9);
-      border-radius: 20px;
-      backdrop-filter: blur(12px);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
-      overflow: hidden;
-      transform: translateY(30px);
-      opacity: 0;
+      display:flex;
+      width:95%;
+      max-width:1300px;
+      background: rgba(255,255,255,0.95);
+      border-radius:20px;
+      backdrop-filter:blur(12px);
+      box-shadow:0 20px 40px rgba(0,0,0,0.25);
+      overflow:hidden;
+      transform:translateY(30px);
+      opacity:0;
       animation: slideUp 1s forwards;
     }
 
     /* Sidebar */
-    .sidebar {
-      flex: 1;
-      background: #2c3e50;
-      color: #fff;
-      padding: 30px 20px;
-    }
-    .sidebar h2 {
-      text-align: center;
-      margin-bottom: 30px;
-      font-size: 24px;
-      letter-spacing: 1px;
-    }
-    .sidebar ul {
-      list-style: none;
-    }
-    .sidebar ul li {
-      margin: 18px 0;
-    }
+    .sidebar { flex:1; background:#2c3e50; color:#fff; padding:30px 20px; }
+    .sidebar h2 { text-align:center; margin-bottom:30px; font-size:24px; letter-spacing:1px; }
+    .sidebar ul { list-style:none; }
+    .sidebar ul li { margin:18px 0; }
     .sidebar ul li a {
-      text-decoration: none;
-      color: #ecf0f1;
-      padding: 10px 15px;
-      border-radius: 10px;
-      display: block;
-      font-weight: 500;
-      transition: 0.3s;
+      text-decoration:none; color:#ecf0f1; padding:10px 15px; border-radius:10px;
+      display:block; font-weight:500; transition:0.3s;
     }
-    .sidebar ul li a:hover {
-      background: rgba(255, 255, 255, 0.1);
-      color: #1abc9c;
-      transform: translateX(8px);
-    }
+    .sidebar ul li a:hover { background: rgba(255,255,255,0.1); color:#1abc9c; transform:translateX(8px); }
 
-    /* Main content */
-    .main-content {
-      flex: 3;
-      padding: 40px;
-    }
-    .header {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 30px;
-      align-items: center;
-    }
-    .header h1 {
-      font-size: 32px;
-      color: #2c3e50;
-    }
+    /* Main Content */
+    .main-content { flex:3; padding:40px; }
+    .header { display:flex; justify-content:space-between; margin-bottom:30px; align-items:center; }
+    .header h1 { font-size:32px; color:#2c3e50; animation: fadeInDown 1s ease; }
     .logout-btn {
-      background: linear-gradient(135deg, #e74c3c, #c0392b);
-      color: #fff;
-      padding: 12px 22px;
-      border-radius: 10px;
-      text-decoration: none;
-      font-weight: bold;
-      letter-spacing: 0.5px;
-      transition: 0.3s;
-      box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+      background: linear-gradient(135deg,#e74c3c,#c0392b);
+      color:#fff;
+      padding:12px 22px;
+      border-radius:10px;
+      text-decoration:none;
+      font-weight:bold;
+      letter-spacing:0.5px;
+      transition:0.3s;
+      box-shadow:0 4px 15px rgba(231,76,60,0.4);
     }
-    .logout-btn:hover {
-      transform: scale(1.07);
-      box-shadow: 0 6px 20px rgba(231, 76, 60, 0.6);
-    }
+    .logout-btn:hover { transform:scale(1.07); box-shadow:0 6px 20px rgba(231,76,60,0.6); }
 
     /* User cards grid */
     .user-grid {
-      display: grid;
+      display:grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 25px;
-    }
-    .user-card {
-      background: linear-gradient(135deg, #f7f9fc, #eef2f7);
-      padding: 25px;
-      border-radius: 18px;
-      text-align: center;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.12);
-      transition: all 0.3s ease;
-      animation: fadeInUp 1s ease;
-      position: relative;
-      overflow: hidden;
-    }
-    .user-card::before {
-      content: "";
-      position: absolute;
-      top: -40%;
-      left: -40%;
-      width: 180%;
-      height: 180%;
-      background: radial-gradient(circle, rgba(52,152,219,0.15), transparent 70%);
-      transform: rotate(25deg);
-    }
-    .user-card h3 {
-      margin-bottom: 12px;
-      font-size: 20px;
-      color: #34495e;
-    }
-    .user-card p {
-      margin: 6px 0;
-      color: #555;
-      font-size: 14px;
-    }
-    .user-card:hover {
-      transform: translateY(-8px) scale(1.04);
-      box-shadow: 0 12px 30px rgba(52,152,219,0.3);
+      gap:25px;
     }
 
-    @keyframes slideUp {
-      to { transform: translateY(0); opacity: 1; }
+    .user-card {
+      background: linear-gradient(135deg,#f7f9fc,#eef2f7);
+      padding:25px;
+      border-radius:18px;
+      text-align:center;
+      box-shadow:0 10px 25px rgba(0,0,0,0.12);
+      transition: all 0.4s ease;
+      animation: fadeInUp 1s ease forwards;
+      position:relative;
+      overflow:hidden;
     }
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
+
+    /* Staggered animation delay */
+    .user-card:nth-child(1) { animation-delay:0.1s; }
+    .user-card:nth-child(2) { animation-delay:0.2s; }
+    .user-card:nth-child(3) { animation-delay:0.3s; }
+    .user-card:nth-child(4) { animation-delay:0.4s; }
+    .user-card:nth-child(5) { animation-delay:0.5s; }
+
+    .user-card::before {
+      content:"";
+      position:absolute;
+      top:-40%; left:-40%;
+      width:180%; height:180%;
+      background: radial-gradient(circle, rgba(52,152,219,0.15), transparent 70%);
+      transform:rotate(25deg);
+    }
+
+    .user-card h3 { margin-bottom:12px; font-size:20px; color:#34495e; }
+    .user-card p { margin:6px 0; color:#555; font-size:14px; }
+
+    .user-card button {
+      margin-top:12px;
+      padding:8px 16px;
+      border:none;
+      border-radius:10px;
+      background:#3498db;
+      color:#fff;
+      font-weight:bold;
+      cursor:pointer;
+      transition:0.3s;
+    }
+    .user-card button:hover {
+      background:#1abc9c;
+      transform:scale(1.05);
+    }
+
+    .user-card:hover { 
+      transform:translateY(-8px) scale(1.04); 
+      box-shadow:0 12px 30px rgba(52,152,219,0.3); 
+    }
+
+    /* Animations */
+    @keyframes slideUp { to { transform:translateY(0); opacity:1; } }
+    @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
+    @keyframes fadeInDown { from {opacity:0; transform:translateY(-30px);} to {opacity:1; transform:translateY(0);} }
+    @keyframes fadeInUp { from {opacity:0; transform:translateY(30px);} to {opacity:1; transform:translateY(0);} }
+
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+      .user-grid { grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); }
+      .user-card h3 { font-size:18px; }
     }
   </style>
 </head>
 <body>
   <div class="admin-container">
+    <!-- Sidebar -->
     <div class="sidebar">
       <h2>Admin Panel</h2>
       <ul>
@@ -156,6 +147,7 @@
       </ul>
     </div>
 
+    <!-- Main Content -->
     <div class="main-content">
       <div class="header">
         <h1>Users</h1>
@@ -168,6 +160,7 @@
           <h3>{{ user.name }}</h3>
           <p><strong>Email:</strong> {{ user.email }}</p>
           <p><strong>Role:</strong> {{ user.role }}</p>
+          <button onclick="alert('View details for {{ user.name }}')">View Details</button>
         </div>
         {% endfor %}
       </div>

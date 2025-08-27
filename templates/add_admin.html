@@ -7,185 +7,85 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_styles.css') }}">
   <style>
     /* Reset */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
+    * { margin:0; padding:0; box-sizing:border-box; }
     body {
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      font-family:"Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg,#667eea,#764ba2);
+      min-height:100vh; display:flex; justify-content:center; align-items:center;
       animation: fadeIn 1s ease-in-out;
     }
 
+    /* Container */
     .admin-container {
-      display: flex;
-      width: 90%;
-      max-width: 1200px;
-      background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-      overflow: hidden;
-      transform: translateY(30px);
-      opacity: 0;
+      display:flex;
+      width:90%;
+      max-width:1200px;
+      background:#fff;
+      border-radius:16px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.2);
+      overflow:hidden;
+      transform:translateY(30px);
+      opacity:0;
       animation: slideUp 1s forwards;
     }
 
+    /* Sidebar */
     .sidebar {
-      flex: 1;
-      background: #2c3e50;
-      color: #fff;
-      padding: 30px 20px;
-      animation: fadeInLeft 1s ease forwards;
+      flex:1; background:#2c3e50; color:#fff; padding:30px 20px; animation: fadeInLeft 1s ease forwards;
     }
-
-    .sidebar h2 {
-      margin-bottom: 20px;
-      font-size: 24px;
-      text-align: center;
-    }
-
-    .sidebar ul {
-      list-style: none;
-    }
-
-    .sidebar ul li {
-      margin: 15px 0;
-    }
-
+    .sidebar h2 { text-align:center; margin-bottom:20px; font-size:24px; }
+    .sidebar ul { list-style:none; }
+    .sidebar ul li { margin:15px 0; }
     .sidebar ul li a {
-      text-decoration: none;
-      color: #ecf0f1;
-      font-size: 16px;
-      transition: color 0.3s, transform 0.2s;
-      display: block;
-      padding: 8px 10px;
-      border-radius: 8px;
+      text-decoration:none; color:#ecf0f1; padding:8px 10px; border-radius:8px;
+      display:block; transition: color 0.3s, transform 0.2s;
     }
+    .sidebar ul li a:hover { color:#3498db; background: rgba(255,255,255,0.1); transform: translateX(5px); }
 
-    .sidebar ul li a:hover {
-      color: #3498db;
-      background: rgba(255, 255, 255, 0.1);
-      transform: translateX(5px);
-    }
-
-    .main-content {
-      flex: 3;
-      padding: 40px;
-      animation: fadeInRight 1s ease forwards;
-    }
-
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 30px;
-    }
-
-    .header h1 {
-      font-size: 28px;
-      color: #2c3e50;
-      animation: fadeInDown 1s ease;
-    }
-
+    /* Main Content */
+    .main-content { flex:3; padding:40px; animation: fadeInRight 1s ease forwards; }
+    .header { display:flex; justify-content:space-between; align-items:center; margin-bottom:30px; }
+    .header h1 { font-size:28px; color:#2c3e50; animation: fadeInDown 1s ease; }
     .logout-btn {
-      text-decoration: none;
-      background: #e74c3c;
-      color: #fff;
-      padding: 10px 18px;
-      border-radius: 8px;
-      font-weight: bold;
+      text-decoration:none; background:#e74c3c; color:#fff;
+      padding:10px 18px; border-radius:8px; font-weight:bold;
       transition: background 0.3s, transform 0.2s;
     }
+    .logout-btn:hover { background:#c0392b; transform:scale(1.05); }
 
-    .logout-btn:hover {
-      background: #c0392b;
-      transform: scale(1.05);
-    }
-
+    /* Form Styling */
     form {
-      background: #f7f9fc;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+      background:#f7f9fc; padding:30px; border-radius:12px;
+      box-shadow:0 5px 20px rgba(0,0,0,0.1);
       animation: fadeIn 1s ease;
     }
-
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: bold;
-      color: #34495e;
-    }
-
+    .form-group { margin-bottom:20px; }
+    .form-group label { display:block; margin-bottom:8px; font-weight:bold; color:#34495e; }
     .form-group input {
-      width: 100%;
-      padding: 12px;
-      border: 2px solid #ccc;
-      border-radius: 8px;
+      width:100%; padding:12px; border:2px solid #ccc; border-radius:8px;
       transition: border-color 0.3s, transform 0.2s;
     }
+    .form-group input:focus { border-color:#3498db; outline:none; transform:scale(1.02); }
 
-    .form-group input:focus {
-      border-color: #3498db;
-      outline: none;
-      transform: scale(1.02);
-    }
-
+    /* Submit Button */
     .btn {
-      width: 100%;
-      padding: 14px;
-      background: linear-gradient(90deg, #3498db, #2980b9);
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      font-size: 16px;
-      cursor: pointer;
+      width:100%; padding:14px; background: linear-gradient(90deg,#3498db,#2980b9);
+      color:#fff; border:none; border-radius:10px; font-size:16px; cursor:pointer;
       transition: transform 0.2s, box-shadow 0.3s;
     }
-
-    .btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
-    }
+    .btn:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(52,152,219,0.4); }
 
     /* Animations */
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    @keyframes slideUp {
-      to { transform: translateY(0); opacity: 1; }
-    }
-
-    @keyframes fadeInLeft {
-      from { opacity: 0; transform: translateX(-50px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
-
-    @keyframes fadeInRight {
-      from { opacity: 0; transform: translateX(50px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
-
-    @keyframes fadeInDown {
-      from { opacity: 0; transform: translateY(-30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
+    @keyframes slideUp { to {transform:translateY(0); opacity:1;} }
+    @keyframes fadeInLeft { from {opacity:0; transform:translateX(-50px);} to {opacity:1; transform:translateX(0);} }
+    @keyframes fadeInRight { from {opacity:0; transform:translateX(50px);} to {opacity:1; transform:translateX(0);} }
+    @keyframes fadeInDown { from {opacity:0; transform:translateY(-30px);} to {opacity:1; transform:translateY(0);} }
   </style>
 </head>
 <body>
   <div class="admin-container">
+    <!-- Sidebar -->
     <div class="sidebar">
       <h2>Admin Panel</h2>
       <ul>
@@ -196,11 +96,14 @@
         <li><a href="{{ url_for('admin') }}">User Dashboard</a></li>
       </ul>
     </div>
+
+    <!-- Main Content -->
     <div class="main-content">
       <div class="header">
         <h1>Add New Admin</h1>
         <a href="{{ url_for('admin_logout') }}" class="logout-btn">Logout</a>
       </div>
+
       <form action="{{ url_for('admin_register') }}" method="post">
         <div class="form-group">
           <label for="username">Username</label>

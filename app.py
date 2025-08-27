@@ -8,6 +8,11 @@ import firebase_admin
 from firebase_admin import credentials, firestore
 
 
+
+
+
+
+
 app = Flask(__name__)
 
 app.secret_key = os.environ.get(
@@ -22,17 +27,42 @@ app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME', 'kdev7830@gmail.co
 app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD', 'kmwzakuuchugabaf')
 
 
+import os
+import json
+import firebase_admin
+from firebase_admin import credentials, firestore
+db = None
+firebase_initialized = False
+
 try:
-    
-    cred = credentials.Certificate("firebase-credentials.json")
+    # Step 1: Check environment variable
+    firebase_creds_env = os.environ.get("FIREBASE_CREDENTIALS")
+
+    if firebase_creds_env:
+        # If FIREBASE_CREDENTIALS is set, use it
+        cred = credentials.Certificate(firebase_creds_env)
+        print("Using Firebase credentials from environment variable.")
+    else:
+        # Fallback: use local JSON file
+        local_path = "firebase-credentials.json"
+        if os.path.exists(local_path):
+            cred = credentials.Certificate(local_path)
+            print("FIREBASE_CREDENTIALS not found, using local file.")
+        else:
+            raise FileNotFoundError(
+                "Firebase credentials not found in env or local file!"
+            )
+
+    # Step 2: Initialize Firebase app
     firebase_admin.initialize_app(cred)
     db = firestore.client()
-    print("Firebase initialized successfully from file.")
+    firebase_initialized = True
+    print("Firebase initialized successfully.")
+
 except Exception as e:
     print(f"Error initializing Firebase: {e}")
-    db = None
-
 mail = Mail(app)
+# Load Firebase credentials from environment variable
 
 
 @app.route('/')

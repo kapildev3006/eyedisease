@@ -1,85 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Appointments - Admin</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_styles.css') }}">
   <style>
-    /* Same global + sidebar + header styles as dashboard */
+    /* Reset and body */
+    * { margin:0; padding:0; box-sizing:border-box; }
     body {
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      font-family:"Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg,#667eea,#764ba2);
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
       animation: fadeIn 1s ease-in-out;
     }
+
+    /* Container */
     .admin-container {
-      display: flex;
-      width: 95%;
-      max-width: 1300px;
-      background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-      overflow: hidden;
-      transform: translateY(30px);
-      opacity: 0;
+      display:flex;
+      width:95%;
+      max-width:1300px;
+      background:#fff;
+      border-radius:16px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.2);
+      overflow:hidden;
+      transform:translateY(30px);
+      opacity:0;
       animation: slideUp 1s forwards;
     }
-    .sidebar {
-      flex: 1;
-      background: #2c3e50;
-      color: #fff;
-      padding: 30px 20px;
-    }
-    .sidebar h2 { text-align: center; margin-bottom: 20px; }
-    .sidebar ul { list-style: none; }
-    .sidebar ul li { margin: 15px 0; }
+
+    /* Sidebar */
+    .sidebar { flex:1; background:#2c3e50; color:#fff; padding:30px 20px; }
+    .sidebar h2 { text-align:center; margin-bottom:20px; font-size:24px; }
+    .sidebar ul { list-style:none; }
+    .sidebar ul li { margin:15px 0; }
     .sidebar ul li a {
-      text-decoration: none; color: #ecf0f1;
-      padding: 8px 10px; border-radius: 8px;
-      display: block; transition: 0.3s;
+      text-decoration:none; color:#ecf0f1; padding:8px 10px; border-radius:8px;
+      display:block; transition: color 0.3s, transform 0.2s;
     }
-    .sidebar ul li a:hover {
-      background: rgba(255,255,255,0.1);
-      color: #3498db;
-      transform: translateX(5px);
-    }
-    .main-content { flex: 3; padding: 40px; }
-    .header { display: flex; justify-content: space-between; margin-bottom: 30px; }
-    .header h1 { font-size: 28px; color: #2c3e50; }
-    .logout-btn {
-      background: #e74c3c; color: #fff; padding: 10px 18px;
-      border-radius: 8px; text-decoration: none;
-      transition: 0.3s;
-    }
-    .logout-btn:hover { background: #c0392b; transform: scale(1.05); }
+    .sidebar ul li a:hover { color:#3498db; background: rgba(255,255,255,0.1); transform: translateX(5px); }
+
+    /* Main Content */
+    .main-content { flex:3; padding:40px; animation: fadeInRight 1s ease forwards; }
+    .header { display:flex; justify-content:space-between; margin-bottom:30px; align-items:center; }
+    .header h1 { font-size:28px; color:#2c3e50; animation: fadeInDown 1s ease; }
+    .logout-btn { text-decoration:none; background:#e74c3c; color:#fff; padding:10px 18px; border-radius:8px; font-weight:bold; transition: background 0.3s, transform 0.2s; }
+    .logout-btn:hover { background:#c0392b; transform:scale(1.05); }
 
     /* Table Styling */
     table {
-      width: 100%; border-collapse: collapse; margin-top: 20px;
-      background: #f7f9fc; border-radius: 12px; overflow: hidden;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+      width:100%; border-collapse:collapse; margin-top:20px;
+      background:#f7f9fc; border-radius:12px; overflow:hidden;
+      box-shadow:0 5px 20px rgba(0,0,0,0.1);
       animation: fadeInUp 1s ease;
     }
-    th, td {
-      padding: 15px; text-align: left; font-size: 15px;
+    th, td { padding:15px; text-align:left; font-size:15px; }
+    th { background:#3498db; color:#fff; text-transform:uppercase; }
+    tr:nth-child(even) { background:#ecf0f1; }
+    tr:hover { background:#d6eaf8; transform: scale(1.02); transition: all 0.3s ease; }
+
+    a.update-btn {
+      text-decoration:none;
+      color:#fff;
+      background:#2980b9;
+      padding:6px 12px;
+      border-radius:6px;
+      transition: transform 0.2s, background 0.3s;
     }
-    th {
-      background: #3498db; color: #fff; text-transform: uppercase;
-    }
-    tr:nth-child(even) { background: #ecf0f1; }
-    tr:hover { background: #d6eaf8; transition: 0.3s; }
+    a.update-btn:hover { background:#3498db; transform: scale(1.05); }
 
     /* Animations */
-    @keyframes slideUp { to {transform: translateY(0); opacity:1;} }
-    @keyframes fadeInUp { from {opacity:0; transform: translateY(30px);} to {opacity:1; transform: translateY(0);} }
+    @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
+    @keyframes slideUp { to {transform:translateY(0); opacity:1;} }
+    @keyframes fadeInRight { from {opacity:0; transform:translateX(50px);} to {opacity:1; transform:translateX(0);} }
+    @keyframes fadeInDown { from {opacity:0; transform:translateY(-30px);} to {opacity:1; transform:translateY(0);} }
+    @keyframes fadeInUp { from {opacity:0; transform:translateY(30px);} to {opacity:1; transform:translateY(0);} }
   </style>
 </head>
 <body>
   <div class="admin-container">
+    <!-- Sidebar -->
     <div class="sidebar">
       <h2>Admin Panel</h2>
       <ul>
@@ -90,6 +93,8 @@
         <li><a href="{{ url_for('admin') }}">User Dashboard</a></li>
       </ul>
     </div>
+
+    <!-- Main Content -->
     <div class="main-content">
       <div class="header">
         <h1>Appointments</h1>
@@ -113,7 +118,7 @@
             <td>{{ app.user_name }}</td>
             <td>{{ app.date }}</td>
             <td>{{ app.status }}</td>
-            <td><a href="{{ url_for('update_appointment', id=app.id) }}">Update</a></td>
+            <td><a href="{{ url_for('update_appointment', id=app.id) }}" class="update-btn">Update</a></td>
           </tr>
           {% endfor %}
         </tbody>

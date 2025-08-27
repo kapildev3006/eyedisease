@@ -99,3 +99,52 @@ body {
     font-weight: bold;
     color: #0077cc;
 }
+
+
+/* Global Animations */
+@keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
+@keyframes fadeInUp { from {opacity:0; transform:translateY(30px);} to {opacity:1; transform:translateY(0);} }
+@keyframes slideUp { to {transform: translateY(0); opacity:1;} }
+@keyframes fadeInLeft { from {opacity:0; transform:translateX(-50px);} to {opacity:1; transform:translateX(0);} }
+@keyframes fadeInRight { from {opacity:0; transform:translateX(50px);} to {opacity:1; transform:translateX(0);} }
+@keyframes fadeInDown { from {opacity:0; transform:translateY(-30px);} to {opacity:1; transform:translateY(0);} }
+
+/* Page Load Animation */
+body { animation: fadeIn 1s ease-in-out; }
+
+/* Containers */
+.admin-container {
+  transform: translateY(30px);
+  opacity: 0;
+  animation: slideUp 1s forwards;
+}
+
+/* Sidebar Animation */
+.sidebar { animation: fadeInLeft 1s ease forwards; }
+
+/* Main Content Animation */
+.main-content { animation: fadeInRight 1s ease forwards; }
+
+/* Header Animation */
+.header h1 { animation: fadeInDown 1s ease; }
+
+/* Table Fade-in */
+.table, .user-grid, .dashboard-cards { animation: fadeInUp 1s ease; }
+
+/* Card Hover Animations */
+.card, .user-card {
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.card:hover, .user-card:hover {
+  transform: translateY(-5px) scale(1.03);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+}
+
+/* Buttons Hover Animation */
+.logout-btn, .btn {
+  transition: transform 0.2s, box-shadow 0.3s, background 0.3s;
+}
+.logout-btn:hover, .btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(52,152,219,0.4);
+}
